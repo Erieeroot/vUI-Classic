@@ -77,10 +77,10 @@ end
 
 function MinimapButtons:SkinButtons()
   for _, Child in pairs({Minimap:GetChildren()}) do
-		local name = Child:GetName()
+		local Name = Child:GetName()
 
-		if (name and not Ignored[name] and Child:IsShown()) then
-			local objectType = Child:GetObjectType()
+		if (Name and not Ignored[Name] and Child:IsShown()) then
+			local Type = Child:GetObjectType()
 
 			Child:SetParent(self.Panel)
 
@@ -123,7 +123,7 @@ function MinimapButtons:SkinButtons()
 					region:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 				end
 			end
-
+			
 			Child.Backdrop = CreateFrame("Frame", nil, Child)
 			Child.Backdrop:SetPoint("TOPLEFT", Child, 0, 0)
 			Child.Backdrop:SetPoint("BOTTOMRIGHT", Child, 0, 0)
@@ -136,11 +136,11 @@ function MinimapButtons:SkinButtons()
 			Child.Backdrop.Texture:SetPoint("BOTTOMRIGHT", Child.Backdrop, -1, 1)
 			Child.Backdrop.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 			Child.Backdrop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
-
+			
 			Child:SetFrameLevel(Minimap:GetFrameLevel() + 10)
 			Child:SetFrameStrata(Minimap:GetFrameStrata())
-
-			if (objectType == "Button" or objectType == "Frame") then
+			
+			if (Type == "Button" or Type == "Frame") then
 				if (Child.SetHighlightTexture) then
 					local Highlight = Child:CreateTexture(nil, "ARTWORK", button)
 					Highlight:SetTexture(Assets:GetTexture(Settings["action-bars-button-highlight"]))
@@ -151,7 +151,7 @@ function MinimapButtons:SkinButtons()
 					Child.Highlight = Highlight
 					Child:SetHighlightTexture(Highlight)
 				end
-
+				
 				if (Child.SetPushedTexture) then
 					local Pushed = Child:CreateTexture(nil, "ARTWORK", button)
 					Pushed:SetTexture(Assets:GetTexture(Settings["action-bars-button-highlight"]))
@@ -163,9 +163,7 @@ function MinimapButtons:SkinButtons()
 					Child:SetPushedTexture(Pushed)
 				end
 			end
-
-      -- TODO: tooltip styling
-
+			
 			tinsert(self.items, Child)
 		end
 	end
@@ -191,12 +189,12 @@ local UpdateBar = function()
 end
 
 function MinimapButtons:Load()
-  if (not Settings["minimap-buttons-enable"]) then
-    return
-  end
-
+	if (not Settings["minimap-buttons-enable"]) then
+		return
+	end
+	
 	self:CreatePanel()
-  self:SkinButtons()
+	self:SkinButtons()
 	
 	if (#self.items == 0) then
 		self:Hide()
@@ -204,9 +202,9 @@ function MinimapButtons:Load()
 		return
 	end
 	
-  UpdateBar()
-  
-   vUI:CreateMover(self.Panel)
+	UpdateBar()
+	
+	vUI:CreateMover(self.Panel)
 end
 
 GUI:AddOptions(function(self)
