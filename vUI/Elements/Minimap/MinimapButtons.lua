@@ -182,6 +182,10 @@ function MinimapButtons:CreatePanel()
 	self.Panel = Frame
 end
 
+function MinimapButtons:Hide()
+	self.Panel:Hide()
+end
+
 local UpdateBar = function()
 	MinimapButtons:PositionButtons(Settings["minimap-buttons-perrow"], Settings["minimap-buttons-size"], Settings["minimap-buttons-spacing"])
 end
@@ -192,7 +196,13 @@ function MinimapButtons:Load()
   end
 
 	self:CreatePanel()
-  self:SkinButtons()	
+  self:SkinButtons()
+	
+	if (#self.items == 0) then
+		self:Hide()
+		
+		return
+	end
 	
   UpdateBar()
   
@@ -201,7 +211,7 @@ end
 
 GUI:AddOptions(function(self)
 	local _, Right = self:GetWindow(Language["Mini Map"])
-	
+
 	Right:CreateHeader(Language["Minimap Buttons"])
 	Right:CreateSwitch("minimap-buttons-enable", Settings["minimap-buttons-enable"], "Enable Minimap Button Bar", "", ReloadUI):RequiresReload(true)
 	Right:CreateSlider("minimap-buttons-size", Settings["minimap-buttons-size"], 16, 44, 1, "Button Size", "", UpdateBar)
