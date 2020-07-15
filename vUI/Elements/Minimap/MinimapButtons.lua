@@ -1,18 +1,13 @@
-if (1 == 1) then
-	return
-end
-
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local MinimapButtons = vUI:NewModule("Minimap Buttons")
 
 local strlower = string.lower
 local strfind = string.find
-local tinsert = table.insert
 
 MinimapButtons.items = {}
 
-local MinimapButtonsBlacklist = {
+local Ignored = {
 	-- Blizzard
 	-- TODO: clean this list up
 	["BattlefieldMinimap"] = true,
@@ -40,79 +35,51 @@ local MinimapButtonsBlacklist = {
 	["ItemRackMinimapFrame"] = true,
 }
 
-local MinimapButtonTextureIdsToRemove = {
+local RemoveByID = {
 	[136430] = true,
 	[136467] = true,
 	[130924] = true,
 }
 
-local OnChange = function(direction, buttonSize, spacing)
-	local lastButton, width, height
-  local panelTotalPadding = 6
-  local numButtons = #MinimapButtons.items
-  local spacing = spacing or Settings["minimap-buttonbar-buttonspacing"]
-  local buttonSize = buttonSize or Settings["minimap-buttonbar-buttonsize"]
-  local direction = direction or Settings["minimap-buttonbar-direction"]
+function MinimapButtons:PositionButtons(perrow, size, spacing)
+	local Total = #MinimapButtons.items
 
-  if (direction == "UP" or direction == "DOWN") then
-    width = buttonSize + panelTotalPadding
-    height = (numButtons * buttonSize) + ((numButtons - 1) * spacing) + panelTotalPadding
-  else
-    width = (numButtons * buttonSize) + ((numButtons - 1) * spacing) + panelTotalPadding
-    height = buttonSize + panelTotalPadding
-  end
-
-  MinimapButtons.Panel:SetSize(width, height)
-
-	for _, Button in pairs(MinimapButtons.items) do
-		if (Button:IsShown()) then
-			Button:SetSize(buttonSize, buttonSize)
-			Button:ClearAllPoints()
-
-      if not lastButton then
-        if (direction == "LEFT") then
-          Button:SetSize("TOPRIGHT", MinimapButtons.Panel, -3, -3)
-        end
-
-        if (direction == "RIGHT") then
-          Button:SetSize("TOPLEFT", MinimapButtons.Panel, 3, -3)
-        end
-
-        if (direction == "DOWN") then
-          Button:SetSize("TOPLEFT", MinimapButtons.Panel, 3, -3)
-        end
-
-        if (direction == "UP") then
-          Button:SetSize("BOTTOMRIGHT", MinimapButtons.Panel, -3, 3)
-        end
-      else
-        if (direction == "LEFT") then
-          Button:SetSize("RIGHT", lastButton, "LEFT", -spacing, 0)
-        end
-
-        if (direction == "RIGHT") then
-          Button:SetSize("LEFT", lastButton, "RIGHT", spacing, 0)
-        end
-
-        if (direction == "DOWN") then
-          Button:SetSize("TOP", lastButton, "BOTTOM", 0, -spacing)
-        end
-
-        if (direction == "UP") then
-          Button:SetSize("BOTTOM", lastButton, "TOP", 0, spacing)
-        end
-			end
-
-			lastButton = Button
+	if (Total < perrow) then
+		perrow = Total
+	end
+	
+	local Columns = ceil(Total / perrow)
+	
+	if (Columns < 1) then
+		Columns = 1
+	end
+	
+	-- Bar sizing
+	MinimapButtons.Panel:SetWidth((size * perrow) + (spacing * (perrow - 1)) + 6)
+	MinimapButtons.Panel:SetHeight((size * Columns) + (spacing * (Columns - 1)) + 6)
+	
+	-- Actual moving
+	for i = 1, Total do
+		local Button = MinimapButtons.items[i]
+		
+		Button:ClearAllPoints()
+		Button:SetSize(size, size)
+		
+		if (i == 1) then
+			Button:SetPoint("TOPLEFT", MinimapButtons.Panel, 3, -3)
+		elseif ((i - 1) % perrow == 0) then
+			Button:SetPoint("TOP", MinimapButtons.items[i - perrow], "BOTTOM", 0, -spacing)
+		else
+			Button:SetPoint("LEFT", MinimapButtons.items[i - 1], "RIGHT", spacing, 0)
 		end
 	end
 end
 
 function MinimapButtons:SkinButtons()
-  for _, Child in ipairs({Minimap:GetChildren()}) do
+  for _, Child in pairs({Minimap:GetChildren()}) do
 		local name = Child:GetName()
 
-		if (name and not MinimapButtonsBlacklist[name] and Child:IsShown()) then
+		if (name and not Ignored[name] and Child:IsShown()) then
 			local objectType = Child:GetObjectType()
 
 			Child:SetParent(self.Panel)
@@ -133,7 +100,7 @@ function MinimapButtons:SkinButtons()
 					local texture = strlower(t)
 					local textureId = region:GetTextureFileID()
 
-					if (textureId and MinimapButtonTextureIdsToRemove[textureId]) then
+					if (textureId and RemoveByID[textureId]) then
 						region:SetTexture(nil)
 					end
 
@@ -159,7 +126,7 @@ function MinimapButtons:SkinButtons()
 
 			Child.Backdrop = CreateFrame("Frame", nil, Child)
 			Child.Backdrop:SetPoint("TOPLEFT", Child, 0, 0)
-			Child.Backdrop:SetSize("BOTTOMRIGHT", Child, 0, 0)
+			Child.Backdrop:SetPoint("BOTTOMRIGHT", Child, 0, 0)
 			Child.Backdrop:SetBackdrop(vUI.Backdrop)
 			Child.Backdrop:SetBackdropColor(0, 0, 0)
 			Child.Backdrop:SetFrameLevel(Child:GetFrameLevel() - 1)
@@ -205,62 +172,39 @@ function MinimapButtons:SkinButtons()
 end
 
 function MinimapButtons:CreatePanel()
-  local Frame = CreateFrame("Frame", "vUI Minimap Buttons", vUI.UIParent)
+	local Frame = CreateFrame("Frame", "vUI Minimap Buttons", vUI.UIParent)
 	Frame:SetBackdrop(vUI.BackdropAndBorder)
 	Frame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Frame:SetBackdropBorderColor(0, 0, 0)
 	Frame:SetFrameStrata("LOW")
-
-	-- NOTE: we are taking into account zone text panel
-	local minimapHeight = Settings["minimap-size"] + 26
+	Frame:SetPoint("TOPRIGHT", vUI:GetModule("Minimap"), "BOTTOMRIGHT", 0, -2)
 	
-	if (Settings["minimap-show-time"]) then
-		-- NOTE: here be unicorn numbers
-		Frame:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -12, -(minimapHeight + 26 + 13))
-	else
-		Frame:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -12, -(minimapHeight + 6))
-	end
+	self.Panel = Frame
+end
 
-  self.Panel = Frame
+local UpdateBar = function()
+	MinimapButtons:PositionButtons(Settings["minimap-buttons-perrow"], Settings["minimap-buttons-size"], Settings["minimap-buttons-spacing"])
 end
 
 function MinimapButtons:Load()
-  if (not Settings["minimap-buttonbar-enable"]) then
+  if (not Settings["minimap-buttons-enable"]) then
     return
   end
 
 	self:CreatePanel()
   self:SkinButtons()	
+	
+  UpdateBar()
   
-  OnChange()
-
-  vUI:CreateMover(self.Panel)
+   vUI:CreateMover(self.Panel)
 end
 
-local DirectionOptions = { 
-	["Up"] = "UP", 
-	["Down"] = "DOWN", 
-	["Left"] = "LEFT", 
-	["Right"] = "RIGHT"
-}
-
 GUI:AddOptions(function(self)
-	local _, Right = self:GetWindow(Language["Minimap"])
-
+	local _, Right = self:GetWindow(Language["Mini Map"])
+	
 	Right:CreateHeader(Language["Minimap Buttons"])
-
-	Right:CreateSwitch("minimap-buttonbar-enable", Settings["minimap-buttonbar-enable"], "Enable Minimap Button Bar", "", ReloadUI):RequiresReload(true)
-
-	Right:CreateDropdown("minimap-buttonbar-direction", Settings["minimap-buttonbar-direction"], DirectionOptions, "Direction", "", function(value)
-		OnChange(value, nil, nil)
-	end)
-	
-	Right:CreateSlider("minimap-buttonbar-buttonsize", Settings["minimap-buttonbar-buttonsize"], 16, 44, 1, "Button Size", "", function(value)
-		OnChange(nil, value, nil)
-	end)
-	
-	Right:CreateSlider("minimap-buttonbar-buttonspacing", Settings["minimap-buttonbar-buttonspacing"], 1, 3, 1, "Button Spacing", "", function()
-		OnChange(nil, nil, value)
-	end)
-	
+	Right:CreateSwitch("minimap-buttons-enable", Settings["minimap-buttons-enable"], "Enable Minimap Button Bar", "", ReloadUI):RequiresReload(true)
+	Right:CreateSlider("minimap-buttons-size", Settings["minimap-buttons-size"], 16, 44, 1, "Button Size", "", UpdateBar)
+	Right:CreateSlider("minimap-buttons-spacing", Settings["minimap-buttons-spacing"], 1, 5, 1, "Button Spacing", "", UpdateBar)
+	Right:CreateSlider("minimap-buttons-perrow", Settings["minimap-buttons-perrow"], 1, 20, 1, "Per Row", "", UpdateBar)
 end)
