@@ -35,6 +35,12 @@ local Ignored = {
 	["ItemRackMinimapFrame"] = true,
 }
 
+local IgnoredTerms = {
+	"dragon",
+	"tuber",
+	"flower",
+}
+
 local RemoveByID = {
 	[136430] = true,
 	[136467] = true,
@@ -75,23 +81,37 @@ function MinimapButtons:PositionButtons(perrow, size, spacing)
 	end
 end
 
+local IsIgnored = function(name)
+	local Ignored
+	
+	for i = 1, #IgnoredTerms do
+		if strfind(name, IgnoredTerms[i]) then
+			Ignored = true
+			print(name)
+			break
+		end
+	end
+	
+	return Ignored
+end
+
 function MinimapButtons:SkinButtons()
   for _, Child in pairs({Minimap:GetChildren()}) do
 		local Name = Child:GetName()
-
-		if (Name and not Ignored[Name] and Child:IsShown()) then
+		
+		if (Name and not Ignored[Name] and not IsIgnored(Name) and Child:IsShown()) then
 			local Type = Child:GetObjectType()
-
+			
 			Child:SetParent(self.Panel)
-
+			
 			if (Child:HasScript("OnDragStart")) then
 				Child:SetScript("OnDragStart", nil)
 			end
-
+			
 			if (Child:HasScript("OnDragStop")) then
 				Child:SetScript("OnDragStop", nil)
 			end
-
+			
 			for i = 1, Child:GetNumRegions() do
 				local region = select(i, Child:GetRegions())
 				
@@ -99,11 +119,11 @@ function MinimapButtons:SkinButtons()
 					local t = region:GetTexture() or ""
 					local texture = strlower(t)
 					local textureId = region:GetTextureFileID()
-
+					
 					if (textureId and RemoveByID[textureId]) then
 						region:SetTexture(nil)
 					end
-
+					
 					if (
 						strfind(texture, [[interface\characterframe]]) or
 						strfind(texture, [[interface\minimap]]) or
@@ -115,7 +135,7 @@ function MinimapButtons:SkinButtons()
 						region:SetTexture(nil)
 						region:SetAlpha(0)
 					end
-	
+
 					region:ClearAllPoints()
 					region:SetPoint("TOPLEFT", Child, 1, -1)
 					region:SetPoint("BOTTOMRIGHT", Child, -1, 1)
