@@ -87,7 +87,7 @@ local IsIgnored = function(name)
 	for i = 1, #IgnoredTerms do
 		if strfind(name, IgnoredTerms[i]) then
 			Ignored = true
-			print(name)
+			
 			break
 		end
 	end
