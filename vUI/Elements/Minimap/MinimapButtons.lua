@@ -28,7 +28,8 @@ local Ignored = {
 	["QueueStatusMinimapButton"] = true,
 	["TimeManagerClockButton"] = true,
 	["MiniMapTrackingFrame"] = true,
-
+	["MinimapBackdrop"] = true,
+	
 	-- Naughty AddOns
 	["QuestieFrameGroup"] = true,
 	-- NOTE: this one is really tricky as it includes a flyout
@@ -113,34 +114,34 @@ function MinimapButtons:SkinButtons()
 			end
 			
 			for i = 1, Child:GetNumRegions() do
-				local region = select(i, Child:GetRegions())
+				local Region = select(i, Child:GetRegions())
 				
-				if (region:GetObjectType() == "Texture") then
-					local t = region:GetTexture() or ""
-					local texture = strlower(t)
-					local textureId = region:GetTextureFileID()
+				if (Region:GetObjectType() == "Texture") then
+					local Texture = Region:GetTexture() or ""
+					local ID = Region:GetTextureFileID()
+					Texture = strlower(Texture)
 					
-					if (textureId and RemoveByID[textureId]) then
-						region:SetTexture(nil)
+					if (ID and RemoveByID[ID]) then
+						Region:SetTexture(nil)
 					end
 					
 					if (
-						strfind(texture, [[interface\characterframe]]) or
-						strfind(texture, [[interface\minimap]]) or
-						strfind(texture, 'border') or 
-						strfind(texture, 'background') or 
-						strfind(texture, 'alphamask') or
-						strfind(texture, 'highlight')
+						strfind(Texture, "interface/characterframe") or
+						strfind(Texture, "interface/minimap") or
+						strfind(Texture, "border") or 
+						strfind(Texture, "background") or 
+						strfind(Texture, "alphamask") or
+						strfind(Texture, "highlight")
 					) then
-						region:SetTexture(nil)
-						region:SetAlpha(0)
+						Region:SetTexture(nil)
+						Region:SetAlpha(0)
 					end
-
-					region:ClearAllPoints()
-					region:SetPoint("TOPLEFT", Child, 1, -1)
-					region:SetPoint("BOTTOMRIGHT", Child, -1, 1)
-					region:SetDrawLayer('ARTWORK')
-					region:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+					
+					Region:ClearAllPoints()
+					Region:SetPoint("TOPLEFT", Child, 1, -1) 
+					Region:SetPoint("BOTTOMRIGHT", Child, -1, 1)
+					Region:SetDrawLayer("ARTWORK")
+					Region:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 				end
 			end
 			
