@@ -74,8 +74,10 @@ local RemoveByID = {
 }
 
 local IsIgnoredAddOn = function(name)
+	name = lower(name)
+	
 	for i = 1, #IgnoredAddOns do
-		if find(lower(name), IgnoredAddOns[i]) then
+		if find(name, IgnoredAddOns[i]) then
 			return true
 		end
 	end
