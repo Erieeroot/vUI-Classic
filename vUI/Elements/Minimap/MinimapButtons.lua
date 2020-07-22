@@ -2,44 +2,69 @@ local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local MinimapButtons = vUI:NewModule("Minimap Buttons")
 
-local strlower = string.lower
-local strfind = string.find
+local lower = string.lower
+local find = string.find
 
 MinimapButtons.items = {}
 
-local Ignored = {
-	-- Blizzard
-	-- TODO: clean this list up
+local IgnoredBlizzard = {
 	["BattlefieldMinimap"] = true,
 	["ButtonCollectFrame"] = true,
 	["FeedbackUIButton"] = true,
 	["GameTimeFrame"] = true,
 	["HelpOpenTicketButton"] = true,
 	["HelpOpenWebTicketButton"] = true,
+	["MinimapBackdrop"] = true,
 	["MiniMapBattlefieldFrame"] = true,
 	["MiniMapLFGFrame"] = true,
 	["MiniMapMailFrame"] = true,
 	["MiniMapTracking"] = true,
+	["MiniMapTrackingFrame"] = true,
 	["MiniMapVoiceChatFrame"] = true,
-	["MinimapBackdrop"] = true,
 	["MinimapZoneTextButton"] = true,
 	["MinimapZoomIn"] = true,
 	["MinimapZoomOut"] = true,
 	["QueueStatusMinimapButton"] = true,
 	["TimeManagerClockButton"] = true,
-	["MiniMapTrackingFrame"] = true,
-	["MinimapBackdrop"] = true,
-	
-	-- Naughty AddOns
-	["QuestieFrameGroup"] = true,
-	-- NOTE: this one is really tricky as it includes a flyout
-	["ItemRackMinimapFrame"] = true,
 }
 
-local IgnoredTerms = {
+-- List borrowed from MBB AddOn
+local IgnoredAddOns = {
+	"archy",
+	"bookoftracksframe",
+	"cartographernotespoi",
+	"cork",
+	"da_minimap",
 	"dragon",
-	"tuber",
+	"dugisarrowminimappoint",
+	"enhancedframeminimapbutton",
+	"fishingextravaganzamini",
 	"flower",
+	"fwgminimappoi",
+	"gatherarchnote",
+	"gathermatepin",
+	"gathernote",
+	"gfw_trackmenuframe",
+	"gfw_trackmenubutton",
+	"gpsarrow",
+	"guildmap3mini",
+	"guildinstance",
+	"handynotespin",
+	"itemrack",
+	"librockconfig-1.0_minimapbutton",
+	"mininotepoi",
+	"nauticusminiicon",
+	"poiminimap",
+	"premadefilter_minimapbutton",
+	"questieframe",
+	"questpointerpoi",
+	"reciperadarminimapicon",
+	"spy_mapnotelist_mini",
+	"tdial_trackingicon",
+	"tdial_trackButton",
+	"tuber",
+	"westpointer",
+	"zgvmarker",
 }
 
 local RemoveByID = {
@@ -48,9 +73,17 @@ local RemoveByID = {
 	[130924] = true,
 }
 
-function MinimapButtons:PositionButtons(perrow, size, spacing)
-	local Total = #MinimapButtons.items
+local IsIgnoredAddOn = function(name)
+	for i = 1, #IgnoredAddOns do
+		if find(lower(name), IgnoredAddOns[i]) then
+			return true
+		end
+	end
+end
 
+function MinimapButtons:PositionButtons(perrow, size, spacing)
+	local Total = #self.items
+	
 	if (Total < perrow) then
 		perrow = Total
 	end
@@ -61,46 +94,32 @@ function MinimapButtons:PositionButtons(perrow, size, spacing)
 		Columns = 1
 	end
 	
-	-- Bar sizing
-	MinimapButtons.Panel:SetWidth((size * perrow) + (spacing * (perrow - 1)) + 6)
-	MinimapButtons.Panel:SetHeight((size * Columns) + (spacing * (Columns - 1)) + 6)
+	-- Panel sizing
+	self.Panel:SetWidth((size * perrow) + (spacing * (perrow - 1)) + 6)
+	self.Panel:SetHeight((size * Columns) + (spacing * (Columns - 1)) + 6)
 	
-	-- Actual moving
+	-- Positioning
 	for i = 1, Total do
-		local Button = MinimapButtons.items[i]
+		local Button = self.items[i]
 		
 		Button:ClearAllPoints()
 		Button:SetSize(size, size)
 		
 		if (i == 1) then
-			Button:SetPoint("TOPLEFT", MinimapButtons.Panel, 3, -3)
+			Button:SetPoint("TOPLEFT", self.Panel, 3, -3)
 		elseif ((i - 1) % perrow == 0) then
-			Button:SetPoint("TOP", MinimapButtons.items[i - perrow], "BOTTOM", 0, -spacing)
+			Button:SetPoint("TOP", self.items[i - perrow], "BOTTOM", 0, -spacing)
 		else
-			Button:SetPoint("LEFT", MinimapButtons.items[i - 1], "RIGHT", spacing, 0)
+			Button:SetPoint("LEFT", self.items[i - 1], "RIGHT", spacing, 0)
 		end
 	end
-end
-
-local IsIgnored = function(name)
-	local Ignored
-	
-	for i = 1, #IgnoredTerms do
-		if strfind(name, IgnoredTerms[i]) then
-			Ignored = true
-			
-			break
-		end
-	end
-	
-	return Ignored
 end
 
 function MinimapButtons:SkinButtons()
-  for _, Child in pairs({Minimap:GetChildren()}) do
+	for _, Child in pairs({Minimap:GetChildren()}) do
 		local Name = Child:GetName()
 		
-		if (Name and not Ignored[Name] and not IsIgnored(Name) and Child:IsShown()) then
+		if (Name and not IgnoredBlizzard[Name] and not IsIgnoredAddOn(Name) and Child:IsShown()) then
 			local Type = Child:GetObjectType()
 			
 			Child:SetParent(self.Panel)
@@ -117,30 +136,30 @@ function MinimapButtons:SkinButtons()
 				local Region = select(i, Child:GetRegions())
 				
 				if (Region:GetObjectType() == "Texture") then
-					local Texture = Region:GetTexture() or ""
 					local ID = Region:GetTextureFileID()
-					Texture = strlower(Texture)
+					local Texture = Region:GetTexture() or ""
+					Texture = lower(Texture)
 					
 					if (ID and RemoveByID[ID]) then
 						Region:SetTexture(nil)
 					end
 					
 					if (
-						strfind(Texture, "interface/characterframe") or
-						strfind(Texture, "interface/minimap") or
-						strfind(Texture, "border") or 
-						strfind(Texture, "background") or 
-						strfind(Texture, "alphamask") or
-						strfind(Texture, "highlight")
+						find(Texture, [[interface\characterframe]]) or
+						find(Texture, [[interface\minimap]]) or
+						find(Texture, "border") or 
+						find(Texture, "background") or 
+						find(Texture, "alphamask") or
+						find(Texture, "highlight")
 					) then
 						Region:SetTexture(nil)
 						Region:SetAlpha(0)
 					end
 					
 					Region:ClearAllPoints()
-					Region:SetPoint("TOPLEFT", Child, 1, -1) 
+					Region:SetPoint("TOPLEFT", Child, 1, -1)
 					Region:SetPoint("BOTTOMRIGHT", Child, -1, 1)
-					Region:SetDrawLayer("ARTWORK")
+					Region:SetDrawLayer('ARTWORK')
 					Region:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 				end
 			end
@@ -225,7 +244,7 @@ function MinimapButtons:Load()
 	
 	UpdateBar()
 	
-	vUI:CreateMover(self.Panel)
+   vUI:CreateMover(self.Panel)
 end
 
 GUI:AddOptions(function(self)
