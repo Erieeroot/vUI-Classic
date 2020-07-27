@@ -269,9 +269,17 @@ local OnTooltipSetUnit = function(self)
 		
 		if Guild then
 			if (Guild == MyGuild) then
-				Guild = format("|cFF5DADE2<%s>|r", Guild)
+				if Settings["tooltips-display-rank"] then
+					Guild = format("|cFF5DADE2<%s>|r (%s)", Guild, Rank)
+				else
+					Guild = format("|cFF5DADE2<%s>|r", Guild)
+				end
 			else
-				Guild = format("|cFF66BB6A<%s>|r", Guild)
+				if Settings["tooltips-display-rank"] then
+					Guild = format("|cFF66BB6A<%s>|r (%s)", Guild, Rank)
+				else
+					Guild = format("|cFF66BB6A<%s>|r", Guild)
+				end
 			end
 		else
 			Guild = ""
@@ -650,6 +658,7 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Information"])
 	Right:CreateSwitch("tooltips-display-realm", Settings["tooltips-display-realm"], Language["Display Realm"], Language["Display character realms"])
 	Right:CreateSwitch("tooltips-display-title", Settings["tooltips-display-title"], Language["Display Title"], Language["Display character titles"])
+	Right:CreateSwitch("tooltips-display-rank", Settings["tooltips-display-rank"], Language["Display Guild Rank"], Language["Display character guild ranks"])
 	Right:CreateSwitch("tooltips-show-price", Settings["tooltips-show-price"], Language["Display Vendor Price"], Language["Dislay the vendor price of an item"])
 	
 	Right:CreateHeader(Language["Disable Tooltips"])
