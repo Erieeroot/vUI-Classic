@@ -186,13 +186,13 @@ end
 ClientInfo["WoW"] = function(name, id)
 	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
 	
-	Class = GetClass(Class)
+	if (not Class:find("%S")) then
+		Class = "DEMONHUNTER"
+	else
+		Class = GetClass(Class)
+	end
 	
 	local ClassColor = vUI.ClassColors[Class]
-	
-	if (not ClassColor) then -- Temporary until I hunt down the issue
-		return name, ProjectIDToName[info.gameAccountInfo.wowProjectID]
-	end
 	
 	ClassColor = vUI:RGBToHex(ClassColor[1], ClassColor[2], ClassColor[3])
 	
@@ -227,7 +227,6 @@ ClientInfo["WTCG"] = function(name, id)
 end
 
 local GetClientInformation = function(client, name, id)
-	
 	if ClientInfo[client] then
 		local Left, Right = ClientInfo[client](name, id)
 		
@@ -250,7 +249,6 @@ local OnEnter = function(self)
 	-- B.Net friends
 	for i = 1, NumBNFriends do
 		local PresenceID, AccountName, BattleTag, IsBattleTagPresence, CharacterName, BNetIDGameAccount, Client, IsOnline, LastOnline, IsAFK, IsDND = BNGetFriendInfo(i)
-		
 		local Left, Right = GetClientInformation(Client, AccountName, (BNetIDGameAccount or PresenceID))
 		
 		if Right then
