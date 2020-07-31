@@ -286,9 +286,9 @@ local OnTooltipSetUnit = function(self)
 		end
 		
 		if (Realm and find(Realm, "%S+")) then
-			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s-%s %s|r", Flag, Color, (Title or Name), Realm, Guild))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s-%s %s|r", Flag, Color, (Settings["tooltips-display-title"] and Title or Name), Realm, Guild))
 		else
-			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s %s|r", Flag, Color, (Title or Name), Guild))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s %s|r", Flag, Color, (Settings["tooltips-display-title"] and Title or Name), Guild))
 		end
 		
 		for i = 2, self:NumLines() do
