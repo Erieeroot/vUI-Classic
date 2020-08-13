@@ -6,31 +6,22 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Credits"], nil, "zzzCredits")
 	
 	Left:CreateHeader(Language["Scripting Help & Mentoring"])
-	Left:CreateDoubleLine("Tukz", "Foof")
-	Left:CreateDoubleLine("Eclipse", "nightcracker")
-	Left:CreateDoubleLine("Elv", "Smelly")
-	Left:CreateDoubleLine("Azilroka", "AlleyKat")
-	Left:CreateDoubleLine("Zork", "Simpy")
+	Left:CreateMessage("Tukz, Foof, Eclipse, nightcracker, Elv, Smelly, Azilroka, AlleyKat, Zork, Simpy")
 	
 	Left:CreateHeader("oUF")
-	Left:CreateDoubleLine("haste", "lightspark")
-	Left:CreateDoubleLine("p3lim", "Rainrider")
+	Left:CreateLine("haste, lightspark, p3lim, Rainrider")
 	
 	Left:CreateHeader("LibHealComm-4.0")
-	Left:CreateDoubleLine("Shadowed103", "xbeeps")
-	Left:CreateLine("Azilroka")
+	Left:CreateLine("Shadowed103, xbeeps, Azilroka")
 	
 	Left:CreateHeader("AceSerializer")
 	Left:CreateLine("Nevcairiel")
 	
 	Right:CreateHeader("LibStub")
-	Right:CreateDoubleLine("Kaelten", "Cladhaire")
-	Right:CreateDoubleLine("ckknight", "Mikk")
-	Right:CreateDoubleLine("Ammo", "Nevcairiel")
-	Right:CreateLine("joshborke")
+	Right:CreateMessage("Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel, joshborke")
 	
 	Right:CreateHeader("LibSharedMedia")
-	Right:CreateDoubleLine("Elkano", "funkehdude")
+	Right:CreateLine("Elkano, funkehdude")
 	
 	Right:CreateHeader("LibClassicDurations, LibClassicCasterino")
 	Right:CreateLine("d87_")
@@ -38,8 +29,8 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader("LibClassicMobHealth-1.0")
 	Right:CreateLine("Pneumatus")
 	
-	Right:CreateHeader("LibDeflate")
-	Right:CreateLine("yoursafety")
+	Left:CreateHeader("LibDeflate")
+	Left:CreateLine("yoursafety")
 	
 	Right:CreateHeader("vUI")
 	Right:CreateLine("Hydra")
