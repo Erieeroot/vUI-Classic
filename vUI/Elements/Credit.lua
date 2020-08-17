@@ -52,6 +52,7 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("|cFF1EFF00Raze|r", "|cFF1EFF00Aaron B.|r")
 	Right:CreateDoubleLine("|cFF1EFF00JDoubleU00|r", "|cFF1EFF00Ingrimmosch|r")
 	Right:CreateDoubleLine("|cFF1EFF00MrPoundsign|r", "|cFF1EFF00Syn|r")
+	Right:CreateLine("|cFF1EFF00Mcbooze|r")
 	
 	Left:CreateFooter()
 	Left:CreateMessage("Thank you to all of these amazing people who have supported the development of this project!")

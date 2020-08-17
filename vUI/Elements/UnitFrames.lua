@@ -622,6 +622,10 @@ local NamePlateCallback = function(self)
 		return
 	end
 	
+	if (not self.EnableElement or not self.DisableElement) then
+		return
+	end
+	
 	if Settings["nameplates-display-debuffs"] then
 		self:EnableElement("Auras")
 	else

@@ -571,10 +571,12 @@ local CopyButtonOnMouseUp = function(self)
 	
 	if Parent:IsTextCopyable() then
 		Parent:SetTextCopyable(false)
+		Parent:EnableMouse(false)
 		
 		Parent.CopyHighlight:SetAlpha(0)
 	else
 		Parent:SetTextCopyable(true)
+		Parent:EnableMouse(true)
 		
 		Parent.CopyHighlight:SetAlpha(0.1)
 	end
