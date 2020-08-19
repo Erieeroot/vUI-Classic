@@ -641,6 +641,9 @@ local NamePlateCallback = function(self)
 		elseif (Settings["nameplates-target-indicator-size"] == "LARGE") then
 			self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Large"))
 			self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Large"))
+		elseif (Settings["nameplates-target-indicator-size"] == "HUGE") then
+			self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Huge"))
+			self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Huge"))
 		end
 	else
 		self:DisableElement("TargetIndicator")
@@ -3436,6 +3439,9 @@ local NamePlateSetTargetIndicatorSize = function(self, value)
 	elseif (value == "LARGE") then
 		self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Large"))
 		self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Large"))
+	elseif (Settings["nameplates-target-indicator-size"] == "HUGE") then
+		self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Huge"))
+		self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Huge"))
 	end
 end
 
@@ -3478,7 +3484,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Target Indicator"])
 	Right:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], Language["Display an indication on the targetted unit name plate"], UpdateNamePlatesTargetHighlight)
-	Right:CreateDropdown("nameplates-target-indicator-size", Settings["nameplates-target-indicator-size"], {["Small"] = "SMALL", ["Large"] = "LARGE"}, Language["Indicator Size"], Language["Select the size of the target indicator"], UpdateNamePlatesTargetIndicatorSize)
+	Right:CreateDropdown("nameplates-target-indicator-size", Settings["nameplates-target-indicator-size"], {[Language["Small"]] = "SMALL", [Language["Large"]] = "LARGE", [Language["Huge"]] = "HUGE"}, Language["Indicator Size"], Language["Select the size of the target indicator"], UpdateNamePlatesTargetIndicatorSize)
 end)
 
 --/run vUIFakeRaid()
