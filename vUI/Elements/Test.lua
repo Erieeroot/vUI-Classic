@@ -1,4 +1,37 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
+
+--[[local BC = vUI:NewModule("Buff Count")
+
+function BC:OnEvent(event, unit)
+	if (unit ~= "player") then
+		return
+	end
+	
+	local Count = 0
+	
+	for i = 1, 40 do
+		local Name = UnitAura("player", i, "HELPFUL")
+		
+		if (not Name) then
+			break
+		end
+		
+		Count = Count + 1
+	end
+	
+	self.Text:SetText(Count)
+end
+
+function BC:Load()
+	self.Text = UIParent:CreateFontString(nil, "OVERLAY", 7)
+	self.Text:SetPoint("CENTER", UIParent, -300, 0)
+	vUI:SetFontInfo(self.Text, "Roboto", 64)
+	self.Text:SetText("0")
+	
+	self:RegisterEvent("UNIT_AURA")
+	self:SetScript("OnEvent", self.OnEvent)
+end]]
+
 --[[
 local Languages = {
 	["English"] = "enUS",

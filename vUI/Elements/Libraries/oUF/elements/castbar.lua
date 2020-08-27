@@ -665,7 +665,7 @@ local function Enable(self, unit)
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
-
+		
 		local spark = element.Spark
 		if(spark and spark:IsObjectType('Texture') and not spark:GetTexture()) then
 			spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])

@@ -1,5 +1,7 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
+if 1 == 1 then return end
+
 local Loot = vUI:NewModule("Loot")
 
 local GetNumLootItems = GetNumLootItems
