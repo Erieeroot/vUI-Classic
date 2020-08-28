@@ -44,7 +44,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("JDoubleU00", "Duds")
 	
 	Right:CreateHeader("Patrons")
-	Right:CreateLine("|cFFFF8000Erieeroot|r")
+	Right:CreateDoubleLine("|cFFFF8000Erieeroot|r", "|cFFFF8000SwoopCrown|r")
 	Right:CreateDoubleLine("|cFFA335EESmelly|r", "|cFFA335EETrix|r")
 	Right:CreateDoubleLine("|cFFA335EEwolimazo|r", "|cFFA335EEAri|r")
 	Right:CreateDoubleLine("|cFF1EFF00Ryex|r", "|cFF1EFF00sylvester|r")

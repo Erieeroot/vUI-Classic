@@ -1093,8 +1093,6 @@ end
 
 function Chat:Load()
 	if (not Settings["chat-enable"]) then
-		self:UnregisterEvent(event)
-		
 		return
 	end
 	
