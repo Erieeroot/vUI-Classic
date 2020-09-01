@@ -865,7 +865,7 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 			local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
 			if(not nameplate) then return end
 			
-			if(nameplate.unitFrame) then
+			if (nameplate.unitFrame and nameplate.unitFrame.UpdateAllElements) then
 				nameplate.unitFrame:UpdateAllElements(event)
 			end
 		end
