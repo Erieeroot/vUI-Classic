@@ -112,6 +112,8 @@ function Tooltips:UpdateFonts(tooltip)
 end
 
 local SetTooltipStyle = function(self)
+	self:SetBackdrop(nil) -- To stop blue tooltips
+
 	if self.Styled then
 		if (self.GetUnit and self:GetUnit()) then
 			self.OuterBG:SetPoint("TOPLEFT", GameTooltipStatusBar, -4, 4)
@@ -121,7 +123,6 @@ local SetTooltipStyle = function(self)
 		
 		Tooltips:UpdateFonts(self)
 	else
-		self:SetBackdrop(nil) -- To stop blue tooltips
 		self:SetFrameLevel(10)
 		self.SetFrameLevel = function() end
 		
@@ -156,8 +157,6 @@ local SetTooltipStyle = function(self)
 		end
 		
 		Tooltips:UpdateFonts(self)
-		
-		self.SetBackdrop = function() end
 		
 		self.Styled = true
 	end
