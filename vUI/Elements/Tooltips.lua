@@ -358,6 +358,8 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
+	self:SetBackdrop(nil)
+	
 	if Settings["tooltips-show-price"] then
 		local VendorPrice = select(11, GetItemInfo(Link))
 		
