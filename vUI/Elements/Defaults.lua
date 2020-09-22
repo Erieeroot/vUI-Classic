@@ -297,6 +297,7 @@ Defaults["dismount-enable"] = true
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
+Defaults["unitframes-show-target-buffs"] = true
 Defaults["unitframes-show-druid-mana"] = true
 Defaults["unitframes-show-mana-timer"] = true
 Defaults["unitframes-show-energy-timer"] = true
