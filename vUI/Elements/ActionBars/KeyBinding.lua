@@ -165,7 +165,7 @@ local PopupOnCancel = function()
 end
 
 local OnAccept = function()
-	SaveBindings(GetCurrentBindingSet())
+	AttemptToSaveBindings(GetCurrentBindingSet())
 	
 	GUI:GetWidgetByWindow(Language["Action Bars"], "discard"):Disable()
 	GUI:GetWidgetByWindow(Language["Action Bars"], "save"):Disable()
