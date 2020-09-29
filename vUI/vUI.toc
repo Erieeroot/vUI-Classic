@@ -1,6 +1,6 @@
 ## Interface: 11305
 ## Author: Hydra
-## Version: 1.00942
+## Version: 1.00943
 ## Title: |cFFFFC44DvUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIGold
@@ -82,7 +82,6 @@ Elements\DataTexts\SoulShards.lua
 Elements\DataTexts\Level.lua
 Elements\DataTexts\Location.lua
 Elements\DataTexts\System.lua
-Elements\RightWindow.lua
 Elements\Loot.lua
 Elements\DruidMana.lua
 Elements\MirrorTimers.lua
