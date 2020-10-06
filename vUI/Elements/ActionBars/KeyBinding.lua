@@ -91,7 +91,7 @@ end
 
 function KeyBinding:OnEvent(event, button)
 	local MouseFocus = GetMouseFocus()
-	
+	print(event, button)
 	if (MouseFocus and MouseFocus.GetName) then
 		local Name = MouseFocus:GetName()
 		
@@ -170,24 +170,26 @@ local OnCancel = function()
 end
 
 function KeyBinding:Enable()
-	self:RegisterEvent("GLOBAL_MOUSE_UP")
+	--self:RegisterEvent("GLOBAL_MOUSE_UP")
+	self.Hover:EnableMouse(true)
 	self:EnableKeyboard(true)
 	self:SetScript("OnUpdate", self.OnUpdate)
 	self:SetScript("OnKeyDown", self.OnKeyDown)
 	self:SetScript("OnKeyUp", self.OnKeyUp)
-	self:SetScript("OnEvent", self.OnEvent)
+	self.Hover:SetScript("OnMouseUp", self.OnEvent)
 	self.Active = true
 	
 	vUI:DisplayPopup(Language["Attention"], Language["Key binding mode is active. Would you like to save your changes?"], Language["Save"], OnAccept, Language["Cancel"], OnCancel)
 end
 
 function KeyBinding:Disable()
-	self:UnregisterEvent("GLOBAL_MOUSE_UP")
+	--self:UnregisterEvent("GLOBAL_MOUSE_UP")
+	self.Hover:EnableMouse(false)
 	self:EnableKeyboard(false)
 	self:SetScript("OnUpdate", nil)
 	self:SetScript("OnKeyDown", nil)
 	self:SetScript("OnKeyUp", nil)
-	self:SetScript("OnEvent", nil)
+	self.Hover:SetScript("OnMouseUp", nil)
 	self.Active = false
 	self.TargetBindingName = nil
 	

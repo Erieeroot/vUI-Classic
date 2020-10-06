@@ -1,171 +1,260 @@
 local vUI, GUI, Language, Assets, Settings, Defaults = select(2, ...):get()
 
-local Testing = {
-	["Zeraphine:Mal'Ganis"] = 1,
-	["Neonsol:Mal'Ganis"] = 1,
-	["Venio:Mal'Ganis"] = 1,
-	["Nitrite:Mal'Ganis"] = 1,
-	["Revival:Mal'Ganis"] = 1,
-	["Zaeta:Mal'Ganis"] = 1,
-	["Psyaviah:Mal'Ganis"] = 1,
-	["Artemis:Mal'Ganis"] = 1,
-}
-
-if (not Testing[vUI.UserProfileKey]) then
-	return
-end
-
-local FRAME_WIDTH = 390
-local FRAME_HEIGHT = 128
-local BAR_HEIGHT = 22
-
+local Window = vUI:NewModule("Right Window")
 local DT = vUI:GetModule("DataText")
 
-local CreateMetersPanels = function()
+function Window:CreateSingleWindow()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
-	local MeterBGBottom = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBGBottom:SetSize(FRAME_WIDTH, BAR_HEIGHT + 6)
-	MeterBGBottom:SetPoint("BOTTOMRIGHT", vUI.UIParent, -13, 13)
-	MeterBGBottom:SetBackdrop(vUI.Backdrop)
-	MeterBGBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	MeterBGBottom:SetBackdropBorderColor(0, 0, 0)
-	MeterBGBottom:SetFrameStrata("LOW")
+	self.Bottom = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Bottom:SetSize(Settings["right-window-width"], 28)
+	self.Bottom:SetPoint("BOTTOMRIGHT", vUI.UIParent, -13, 13)
+	self.Bottom:SetBackdrop(vUI.Backdrop)
+	self.Bottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Bottom:SetBackdropBorderColor(0, 0, 0)
+	self.Bottom:SetFrameStrata("LOW")
 	
-	local MeterBGBottomFrame = CreateFrame("Frame", "vUIMeterBGBottom", vUI.UIParent)
-	MeterBGBottomFrame:SetSize(FRAME_WIDTH - 6, BAR_HEIGHT)
-	MeterBGBottomFrame:SetPoint("BOTTOM", MeterBGBottom, "BOTTOM", 0, 3)
-	MeterBGBottomFrame:SetBackdrop(vUI.BackdropAndBorder)
-	MeterBGBottomFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
-	MeterBGBottomFrame:SetBackdropBorderColor(0, 0, 0)
-	MeterBGBottomFrame:SetFrameStrata("MEDIUM")
+	self.BottomFrame = CreateFrame("Frame", nil, vUI.UIParent)
+	self.BottomFrame:SetSize(Settings["right-window-width"] - 6, 22)
+	self.BottomFrame:SetPoint("BOTTOM", self.Bottom, "BOTTOM", 0, 3)
+	self.BottomFrame:SetBackdrop(vUI.BackdropAndBorder)
+	self.BottomFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	self.BottomFrame:SetBackdropBorderColor(0, 0, 0)
+	self.BottomFrame:SetFrameStrata("MEDIUM")
 	
-	MeterBGBottomFrame.Texture = MeterBGBottomFrame:CreateTexture(nil, "OVERLAY")
-	MeterBGBottomFrame.Texture:SetPoint("TOPLEFT", MeterBGBottomFrame, 1, -1)
-	MeterBGBottomFrame.Texture:SetPoint("BOTTOMRIGHT", MeterBGBottomFrame, -1, 1)
-	MeterBGBottomFrame.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
-	MeterBGBottomFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	self.BottomFrame.Texture = self.BottomFrame:CreateTexture(nil, "OVERLAY")
+	self.BottomFrame.Texture:SetPoint("TOPLEFT", self.BottomFrame, 1, -1)
+	self.BottomFrame.Texture:SetPoint("BOTTOMRIGHT", self.BottomFrame, -1, 1)
+	self.BottomFrame.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.BottomFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
-	local MeterBGLeft = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBGLeft:SetSize(4, FRAME_HEIGHT)
-	MeterBGLeft:SetPoint("BOTTOMLEFT", MeterBGBottom, 0, 0)
-	MeterBGLeft:SetBackdrop(vUI.Backdrop)
-	MeterBGLeft:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	MeterBGLeft:SetBackdropBorderColor(0, 0, 0)
-	MeterBGLeft:SetFrameStrata("LOW")
+	self.Left = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Left:SetSize(4, Settings["right-window-height"])
+	self.Left:SetPoint("BOTTOMLEFT", self.Bottom, 0, 0)
+	self.Left:SetBackdrop(vUI.Backdrop)
+	self.Left:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Left:SetBackdropBorderColor(0, 0, 0)
+	self.Left:SetFrameStrata("LOW")
 	
-	local MeterBGRight = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBGRight:SetSize(4, FRAME_HEIGHT)
-	MeterBGRight:SetPoint("BOTTOMRIGHT", MeterBGBottom, 0, 0)
-	MeterBGRight:SetBackdrop(vUI.Backdrop)
-	MeterBGRight:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	MeterBGRight:SetBackdropBorderColor(0, 0, 0)
-	MeterBGRight:SetFrameStrata("LOW")
+	self.Right = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Right:SetSize(4, Settings["right-window-height"])
+	self.Right:SetPoint("BOTTOMRIGHT", self.Bottom, 0, 0)
+	self.Right:SetBackdrop(vUI.Backdrop)
+	self.Right:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Right:SetBackdropBorderColor(0, 0, 0)
+	self.Right:SetFrameStrata("LOW")
 	
-	local MeterBGTop = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBGTop:SetSize(FRAME_WIDTH, BAR_HEIGHT + 4)
-	MeterBGTop:SetPoint("BOTTOMLEFT", MeterBGLeft, "TOPLEFT", 0, 0)
-	MeterBGTop:SetBackdrop(vUI.Backdrop)
-	MeterBGTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	MeterBGTop:SetBackdropBorderColor(0, 0, 0)
-	MeterBGTop:SetFrameStrata("LOW")
+	self.Top = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Top:SetSize(Settings["right-window-width"], 26)
+	self.Top:SetPoint("BOTTOMLEFT", self.Left, "TOPLEFT", 0, 0)
+	self.Top:SetBackdrop(vUI.Backdrop)
+	self.Top:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Top:SetBackdropBorderColor(0, 0, 0)
+	self.Top:SetFrameStrata("LOW")
 	
-	local MeterBG = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBG:SetPoint("BOTTOMLEFT", MeterBGLeft, 0, 0)
-	MeterBG:SetPoint("TOPRIGHT", MeterBGTop, 0, 0)
-	MeterBG:SetBackdrop(vUI.BackdropAndBorder)
-	MeterBG:SetBackdropColor(R, G, B, (Settings["chat-bg-opacity"] / 100))
-	MeterBG:SetBackdropBorderColor(0, 0, 0)
-	MeterBG:SetFrameStrata("BACKGROUND")
+	self.Backdrop = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Backdrop:SetPoint("BOTTOMLEFT", self.Left, 0, 0)
+	self.Backdrop:SetPoint("TOPRIGHT", self.Top, 0, 0)
+	self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	self.Backdrop:SetBackdropColor(R, G, B, (Settings["right-window-opacity"] / 100))
+	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
+	self.Backdrop:SetFrameStrata("BACKGROUND")
 	
-	local TopLeft = CreateFrame("Frame", nil, vUI.UIParent)
-	TopLeft:SetSize((FRAME_WIDTH / 2) - 4, BAR_HEIGHT)
-	TopLeft:SetPoint("TOPLEFT", MeterBGTop, 3, -2)
-	TopLeft:SetBackdrop(vUI.BackdropAndBorder)
-	TopLeft:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	TopLeft:SetBackdropBorderColor(0, 0, 0)
-	TopLeft:SetFrameStrata("LOW")
+	self.TopBar = CreateFrame("Frame", nil, vUI.UIParent)
+	self.TopBar:SetSize(Settings["right-window-width"], 22)
+	self.TopBar:SetPoint("TOPLEFT", self.Top, 3, -2)
+	self.TopBar:SetPoint("TOPRIGHT", self.Top, -3, -2)
+	self.TopBar:SetBackdrop(vUI.BackdropAndBorder)
+	self.TopBar:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.TopBar:SetBackdropBorderColor(0, 0, 0)
+	self.TopBar:SetFrameStrata("LOW")
+	self.TopBar:SetFrameLevel(1)
 	
-	TopLeft.Texture = TopLeft:CreateTexture(nil, "OVERLAY")
-	TopLeft.Texture:SetPoint("TOPLEFT", TopLeft, 1, -1)
-	TopLeft.Texture:SetPoint("BOTTOMRIGHT", TopLeft, -1, 1)
-	TopLeft.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
-	TopLeft.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	self.TopBar.Texture = self.TopBar:CreateTexture(nil, "OVERLAY")
+	self.TopBar.Texture:SetPoint("TOPLEFT", self.TopBar, 1, -1)
+	self.TopBar.Texture:SetPoint("BOTTOMRIGHT", self.TopBar, -1, 1)
+	self.TopBar.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.TopBar.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
-	local TopRight = CreateFrame("Frame", nil, vUI.UIParent)
-	TopRight:SetSize((FRAME_WIDTH / 2) - 4, BAR_HEIGHT)
-	TopRight:SetPoint("TOPRIGHT", MeterBGTop, -3, -2)
-	TopRight:SetBackdrop(vUI.BackdropAndBorder)
-	TopRight:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	TopRight:SetBackdropBorderColor(0, 0, 0)
-	TopRight:SetFrameStrata("LOW")
+	self.OuterOutline = CreateFrame("Frame", "vUIMetersFrame", self.Bottom)
+	self.OuterOutline:SetPoint("TOPLEFT", self.Top, 0, 1)
+	self.OuterOutline:SetPoint("BOTTOMRIGHT", self.Bottom, 0, 0)
+	self.OuterOutline:SetBackdrop(vUI.Outline)
+	self.OuterOutline:SetBackdropBorderColor(0, 0, 0)
 	
-	TopRight.Texture = TopRight:CreateTexture(nil, "OVERLAY")
-	TopRight.Texture:SetPoint("TOPLEFT", TopRight, 1, -1)
-	TopRight.Texture:SetPoint("BOTTOMRIGHT", TopRight, -1, 1)
-	TopRight.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
-	TopRight.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	self.InnerOutline = CreateFrame("Frame", nil, self.Bottom)
+	self.InnerOutline:SetPoint("TOPLEFT", self.Left, "TOPRIGHT", -1, 0)
+	self.InnerOutline:SetPoint("BOTTOMRIGHT", self.BottomFrame, "TOPRIGHT", 0, 2)
+	self.InnerOutline:SetBackdrop(vUI.Outline)
+	self.InnerOutline:SetBackdropBorderColor(0, 0, 0)
+end
+
+function Window:CreateDoubleWindow()
+	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
-	local MeterBGMiddle = CreateFrame("Frame", nil, vUI.UIParent)
-	MeterBGMiddle:SetPoint("TOP", MeterBGTop, "BOTTOM", 0, 0)
-	MeterBGMiddle:SetPoint("BOTTOM", MeterBGBottom, "TOP", 0, 0)
-	MeterBGMiddle:SetWidth(4)
-	MeterBGMiddle:SetBackdrop(vUI.Backdrop)
-	MeterBGMiddle:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	MeterBGMiddle:SetBackdropBorderColor(0, 0, 0)
-	MeterBGMiddle:SetFrameStrata("LOW")
+	self.Bottom = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Bottom:SetSize(Settings["right-window-width"], 28)
+	self.Bottom:SetPoint("BOTTOMRIGHT", vUI.UIParent, -13, 13)
+	self.Bottom:SetBackdrop(vUI.Backdrop)
+	self.Bottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Bottom:SetBackdropBorderColor(0, 0, 0)
+	self.Bottom:SetFrameStrata("LOW")
 	
-	local OuterOutline = CreateFrame("Frame", "vUIMetersFrame", MeterBGBottom)
-	OuterOutline:SetPoint("TOPLEFT", MeterBGTop, 0, 1)
-	OuterOutline:SetPoint("BOTTOMRIGHT", MeterBGBottom, 0, 0)
-	OuterOutline:SetBackdrop(vUI.Outline)
-	OuterOutline:SetBackdropBorderColor(0, 0, 0)
+	self.BottomFrame = CreateFrame("Frame", nil, vUI.UIParent)
+	self.BottomFrame:SetSize(Settings["right-window-width"] - 6, 22)
+	self.BottomFrame:SetPoint("BOTTOM", self.Bottom, "BOTTOM", 0, 3)
+	self.BottomFrame:SetBackdrop(vUI.BackdropAndBorder)
+	self.BottomFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	self.BottomFrame:SetBackdropBorderColor(0, 0, 0)
+	self.BottomFrame:SetFrameStrata("MEDIUM")
 	
-	local InnerLeftOutline = CreateFrame("Frame", nil, MeterBGBottom)
-	InnerLeftOutline:SetPoint("TOPLEFT", MeterBGLeft, "TOPRIGHT", -1, 0)
-	InnerLeftOutline:SetPoint("BOTTOMRIGHT", MeterBGMiddle, "BOTTOMLEFT", 1, -1)
-	InnerLeftOutline:SetBackdrop(vUI.Outline)
-	InnerLeftOutline:SetBackdropBorderColor(0, 0, 0)
+	self.BottomFrame.Texture = self.BottomFrame:CreateTexture(nil, "OVERLAY")
+	self.BottomFrame.Texture:SetPoint("TOPLEFT", self.BottomFrame, 1, -1)
+	self.BottomFrame.Texture:SetPoint("BOTTOMRIGHT", self.BottomFrame, -1, 1)
+	self.BottomFrame.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.BottomFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
-	local InnerRightOutline = CreateFrame("Frame", nil, MeterBGBottom)
-	InnerRightOutline:SetPoint("TOPRIGHT", MeterBGRight, "TOPLEFT", 1, 0)
-	InnerRightOutline:SetPoint("BOTTOMLEFT", MeterBGMiddle, "BOTTOMRIGHT", -1, -1)
-	InnerRightOutline:SetBackdrop(vUI.Outline)
-	InnerRightOutline:SetBackdropBorderColor(0, 0, 0)
+	self.Left = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Left:SetSize(4, Settings["right-window-height"])
+	self.Left:SetPoint("BOTTOMLEFT", self.Bottom, 0, 0)
+	self.Left:SetBackdrop(vUI.Backdrop)
+	self.Left:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Left:SetBackdropBorderColor(0, 0, 0)
+	self.Left:SetFrameStrata("LOW")
 	
-	-- Weird spot for this to live, right now.
-	local Width = MeterBGBottomFrame:GetWidth() / 3
-	local Height = MeterBGBottomFrame:GetHeight()
+	self.Right = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Right:SetSize(4, Settings["right-window-height"])
+	self.Right:SetPoint("BOTTOMRIGHT", self.Bottom, 0, 0)
+	self.Right:SetBackdrop(vUI.Backdrop)
+	self.Right:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Right:SetBackdropBorderColor(0, 0, 0)
+	self.Right:SetFrameStrata("LOW")
 	
-	local BottomLeft = DT:NewAnchor("Window-Left", MeterBGBottomFrame)
-	BottomLeft:SetSize(Width, Height)
-	BottomLeft:SetPoint("LEFT", MeterBGBottomFrame, 0, 0)
+	self.Top = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Top:SetSize(Settings["right-window-width"], 26)
+	self.Top:SetPoint("BOTTOMLEFT", self.Left, "TOPLEFT", 0, 0)
+	self.Top:SetBackdrop(vUI.Backdrop)
+	self.Top:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Top:SetBackdropBorderColor(0, 0, 0)
+	self.Top:SetFrameStrata("LOW")
 	
-	local BottomMiddle = DT:NewAnchor("Window-Middle", MeterBGBottomFrame)
-	BottomMiddle:SetSize(Width, Height)
-	BottomMiddle:SetPoint("LEFT", BottomLeft, "RIGHT", 0, 0)
+	self.Backdrop = CreateFrame("Frame", nil, vUI.UIParent)
+	self.Backdrop:SetPoint("BOTTOMLEFT", self.Left, 0, 0)
+	self.Backdrop:SetPoint("TOPRIGHT", self.Top, 0, 0)
+	self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	self.Backdrop:SetBackdropColor(R, G, B, (Settings["right-window-opacity"] / 100))
+	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
+	self.Backdrop:SetFrameStrata("BACKGROUND")
 	
-	local BottomRight = DT:NewAnchor("Window-Right", MeterBGBottomFrame)
-	BottomRight:SetSize(Width, Height)
-	BottomRight:SetPoint("LEFT", BottomMiddle, "RIGHT", 0, 0)
+	self.TopLeft = CreateFrame("Frame", nil, vUI.UIParent)
+	self.TopLeft:SetSize((Settings["right-window-width"] / 2) - 4, 22)
+	self.TopLeft:SetPoint("TOPLEFT", self.Top, 3, -2)
+	self.TopLeft:SetBackdrop(vUI.BackdropAndBorder)
+	self.TopLeft:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.TopLeft:SetBackdropBorderColor(0, 0, 0)
+	self.TopLeft:SetFrameStrata("LOW")
+	
+	self.TopLeft.Texture = self.TopLeft:CreateTexture(nil, "OVERLAY")
+	self.TopLeft.Texture:SetPoint("TOPLEFT", self.TopLeft, 1, -1)
+	self.TopLeft.Texture:SetPoint("BOTTOMRIGHT", self.TopLeft, -1, 1)
+	self.TopLeft.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.TopLeft.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	
+	self.TopRight = CreateFrame("Frame", nil, vUI.UIParent)
+	self.TopRight:SetSize((Settings["right-window-width"] / 2) - 4, 22)
+	self.TopRight:SetPoint("TOPRIGHT", self.Top, -3, -2)
+	self.TopRight:SetBackdrop(vUI.BackdropAndBorder)
+	self.TopRight:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.TopRight:SetBackdropBorderColor(0, 0, 0)
+	self.TopRight:SetFrameStrata("LOW")
+	
+	self.TopRight.Texture = self.TopRight:CreateTexture(nil, "OVERLAY")
+	self.TopRight.Texture:SetPoint("TOPLEFT", self.TopRight, 1, -1)
+	self.TopRight.Texture:SetPoint("BOTTOMRIGHT", self.TopRight, -1, 1)
+	self.TopRight.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.TopRight.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	
+	self.BackdropMiddle = CreateFrame("Frame", nil, vUI.UIParent)
+	self.BackdropMiddle:SetPoint("TOP", self.Top, "BOTTOM", 0, 0)
+	self.BackdropMiddle:SetPoint("BOTTOM", self.Bottom, "TOP", 0, 0)
+	self.BackdropMiddle:SetWidth(4)
+	self.BackdropMiddle:SetBackdrop(vUI.Backdrop)
+	self.BackdropMiddle:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.BackdropMiddle:SetBackdropBorderColor(0, 0, 0)
+	self.BackdropMiddle:SetFrameStrata("LOW")
+	
+	self.OuterOutline = CreateFrame("Frame", "vUIMetersFrame", self.Bottom)
+	self.OuterOutline:SetPoint("TOPLEFT", self.Top, 0, 1)
+	self.OuterOutline:SetPoint("BOTTOMRIGHT", self.Bottom, 0, 0)
+	self.OuterOutline:SetBackdrop(vUI.Outline)
+	self.OuterOutline:SetBackdropBorderColor(0, 0, 0)
+	
+	self.InnerLeftOutline = CreateFrame("Frame", nil, self.Bottom)
+	self.InnerLeftOutline:SetPoint("TOPLEFT", self.Left, "TOPRIGHT", -1, 0)
+	self.InnerLeftOutline:SetPoint("BOTTOMRIGHT", self.BackdropMiddle, "BOTTOMLEFT", 1, -1)
+	self.InnerLeftOutline:SetBackdrop(vUI.Outline)
+	self.InnerLeftOutline:SetBackdropBorderColor(0, 0, 0)
+	
+	self.InnerRightOutline = CreateFrame("Frame", nil, self.Bottom)
+	self.InnerRightOutline:SetPoint("TOPRIGHT", self.Right, "TOPLEFT", 1, 0)
+	self.InnerRightOutline:SetPoint("BOTTOMLEFT", self.BackdropMiddle, "BOTTOMRIGHT", -1, -1)
+	self.InnerRightOutline:SetBackdrop(vUI.Outline)
+	self.InnerRightOutline:SetBackdropBorderColor(0, 0, 0)
+end
+
+function Window:AddDataTexts()
+	local Width = self.BottomFrame:GetWidth() / 3
+	local Height = self.BottomFrame:GetHeight()
+	
+	local Left = DT:NewAnchor("Window-Left", self.BottomFrame)
+	Left:SetSize(Width, Height)
+	Left:SetPoint("LEFT", self.BottomFrame, 0, 0)
+	
+	local Middle = DT:NewAnchor("Window-Middle", self.BottomFrame)
+	Middle:SetSize(Width, Height)
+	Middle:SetPoint("LEFT", Left, "RIGHT", 0, 0)
+	
+	local Right = DT:NewAnchor("Window-Right", self.BottomFrame)
+	Right:SetSize(Width, Height)
+	Right:SetPoint("LEFT", Middle, "RIGHT", 0, 0)
 	
 	DT:SetDataText("Window-Left", Settings["data-text-extra-left"])
 	DT:SetDataText("Window-Middle", Settings["data-text-extra-middle"])
 	DT:SetDataText("Window-Right", Settings["data-text-extra-right"])
 end
 
-local Frame = CreateFrame("Frame")
+function Window:UpdateDataTexts()
+	local Width = self.BottomFrame:GetWidth() / 3
+	
+	local Left = DT:GetAnchor("Window-Left")
+	Left:SetWidth(Width)
+	Left:ClearAllPoints()
+	Left:SetPoint("LEFT", self.BottomFrame, 0, 0)
+	
+	local Middle = DT:GetAnchor("Window-Middle")
+	Middle:SetWidth(Width)
+	Middle:ClearAllPoints()
+	Middle:SetPoint("LEFT", Left, "RIGHT", 0, 0)
+	
+	local Right = DT:GetAnchor("Window-Right")
+	Right:SetWidth(Width)
+	Right:ClearAllPoints()
+	Right:SetPoint("LEFT", Middle, "RIGHT", 0, 0)
+end
 
-Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-Frame:SetScript("OnEvent", function(self, event)
-	if (not Settings["meters-container-show"]) then
-		
+function Window:Load()
+	if (not Settings["right-window-enable"]) then
+		return
 	end
 	
-	CreateMetersPanels()
+	if (Settings["right-window-size"] == "SINGLE") then
+		self:CreateSingleWindow()
+	else
+		self:CreateDoubleWindow()
+	end
 	
-	self:UnregisterEvent(event)
-end)
+	self:AddDataTexts()
+end
 
 local UpdateLeftText = function(value)
 	DT:SetDataText("Window-Left", value)
@@ -179,9 +268,33 @@ local UpdateRightText = function(value)
 	DT:SetDataText("Window-Right", value)
 end
 
-Defaults["data-text-extra-left"] = "Bag Slots"
-Defaults["data-text-extra-middle"] = "Friends"
-Defaults["data-text-extra-right"] = "Guild"
+local UpdateOpacity = function(value)
+	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
+	
+	Window.Backdrop:SetBackdropColor(R, G, B, (Settings["right-window-opacity"] / 100))
+end
+
+local UpdateWidth = function(value)
+	if (Settings["right-window-size"] == "SINGLE") then
+		Window.Bottom:SetWidth(value)
+		Window.BottomFrame:SetWidth(value - 6)
+		Window.Top:SetWidth(value)
+		Window.TopBar:SetWidth(value)
+	else
+		Window.Bottom:SetWidth(value)
+		Window.BottomFrame:SetWidth(value - 6)
+		Window.Top:SetWidth(value)
+		Window.TopLeft:SetWidth((value / 2) - 4)
+		Window.TopRight:SetWidth((value / 2) - 4)
+	end
+	
+	Window:UpdateDataTexts()
+end
+
+local UpdateHeight = function(value)
+	Window.Left:SetHeight(value)
+	Window.Right:SetHeight(value)
+end
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:GetWindow(Language["Data Texts"])
@@ -190,4 +303,13 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("data-text-extra-left", Settings["data-text-extra-left"], DT.List, Language["Set Left Text"], Language["Set the information to be displayed in the left data text anchor"], UpdateLeftText)
 	Left:CreateDropdown("data-text-extra-middle", Settings["data-text-extra-middle"], DT.List, Language["Set Middle Text"], Language["Set the information to be displayed in the middle data text anchor"], UpdateMiddleText)
 	Left:CreateDropdown("data-text-extra-right", Settings["data-text-extra-right"], DT.List, Language["Set Right Text"], Language["Set the information to be displayed in the right data text anchor"], UpdateRightText)
+	
+	Left, Right = self:GetWindow("General")
+	
+	Left:CreateHeader(Language["Right Window"])
+	Left:CreateSwitch("right-window-enable", Settings["right-window-enable"], Language["Enable Right Window"], Language["Enable the right side window, for placing chat or addons into"], ReloadUI):RequiresReload(true)
+	Left:CreateDropdown("right-window-size", Settings["right-window-size"], {[Language["Single"]] = "SINGLE", [Language["Double"]] = "DOUBLE"}, Language["Set Window Size"], Language["Set the number of windows to be displayed"], ReloadUI):RequiresReload(true)
+	Left:CreateSlider("right-window-width", Settings["right-window-width"], 300, 650, 1, Language["Window Width"], Language["Set the width of the window"], UpdateWidth)
+	Left:CreateSlider("right-window-height", Settings["right-window-height"], 40, 350, 1, Language["Window Height"], Language["Set the height of the window"], UpdateHeight)
+	Left:CreateSlider("right-window-opacity", Settings["right-window-opacity"], 0, 100, 5, Language["Background Opacity"], Language["Set the opacity of the window background"], UpdateOpacity, nil, "%")
 end)

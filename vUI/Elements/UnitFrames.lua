@@ -1152,6 +1152,28 @@ local StylePlayer = function(self, unit)
 		self.Castbar = Castbar
 	end
 	
+	--[[if (vUI.UserClass == "SHAMAN") then
+		local Totems = {}
+		
+		for i = 1, 5 do
+			local Totem = CreateFrame("Button", nil, self)
+			Totem:SetSize(32, 32)
+			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * Totem:GetWidth(), 0)
+			
+			local Icon = Totem:CreateTexture(nil, "OVERLAY")
+			Icon:SetAllPoints()
+			Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			
+			local Cooldown = CreateFrame("Cooldown", nil, Totem, "CooldownFrameTemplate")
+			Cooldown:SetAllPoints()
+			
+			Totem.Icon = Icon
+			Totem.Cooldown = Cooldown
+			
+			Totems[i] = Totem
+		end
+		
+		self.Totems = Totems]]
 	if (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
 		ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
