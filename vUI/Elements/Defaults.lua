@@ -124,7 +124,6 @@ Defaults["color-tapped"] = "A6A6A6"
 Defaults["color-disconnected"] = "A6A6A6"
 
 -- Action Bars
--- Action Bars
 Defaults["ab-enable"] = true
 
 Defaults["ab-show-hotkey"] = true
