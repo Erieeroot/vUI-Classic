@@ -189,6 +189,8 @@ function vUI:LoadPlugins()
 			self.Plugins[i]:Load()
 		end
 	end
+	
+	self:AddPluginInfo()
 end
 
 function vUI:AddPluginInfo()
@@ -213,6 +215,9 @@ function vUI:AddPluginInfo()
 		Anchor:CreateLine(" ")
 		Anchor:CreateMessage(self.Plugins[i].Notes)
 	end
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end
 
 -- NYI, Concept list for my preferred CVars, and those important to the UI
@@ -435,7 +440,11 @@ function vUI:SetFontInfo(object, font, size, flags)
 end
 
 -- Events
-function vUI:VARIABLES_LOADED(event)
+function vUI:ADDON_LOADED(event, addon)
+	if (addon ~= "vUI") then
+		return
+	end
+	
 	Defaults["ui-scale"] = self:GetSuggestedScale()
 	
 	-- Import profile data and load a profile
@@ -477,7 +486,7 @@ function vUI:OnEvent(event, ...)
 	end
 end
 
-vUI:RegisterEvent("VARIABLES_LOADED")
+vUI:RegisterEvent("ADDON_LOADED")
 vUI:RegisterEvent("PLAYER_ENTERING_WORLD")
 vUI:SetScript("OnEvent", vUI.OnEvent)
 
