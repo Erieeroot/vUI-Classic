@@ -450,7 +450,7 @@ function vUI:ADDON_LOADED(event, addon)
 	-- Import profile data and load a profile
 	--self:MigrateData()
 	self:CreateProfileData()
-	self:MigrateMoverData()
+	--self:MigrateMoverData()
 	self:UpdateProfileList()
 	self:ApplyProfile(self:GetActiveProfileName())
 	
