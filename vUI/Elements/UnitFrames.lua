@@ -1015,35 +1015,45 @@ local StylePlayer = function(self, unit)
 	self.colors.health = {R, G, B}
 	
 	SetHealthAttributes(Health, Settings["unitframes-player-health-color"])
-	
-	local Power = CreateFrame("StatusBar", nil, self)
-	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
-	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
-	Power:SetHeight(Settings["unitframes-player-power-height"])
-	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	Power:SetReverseFill(Settings["unitframes-player-power-reverse"])
-	
-	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
-	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
-	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	PowerBG:SetAlpha(0.2)
-	
-	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	vUI:SetFontInfo(PowerRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	PowerRight:SetPoint("RIGHT", Power, -3, 0)
-	PowerRight:SetJustifyH("RIGHT")
-	
-	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	vUI:SetFontInfo(PowerLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	PowerLeft:SetPoint("LEFT", Power, 3, 0)
-	PowerLeft:SetJustifyH("LEFT")
-	
-	-- Attributes
-	Power.frequentUpdates = true
-	Power.Smooth = true
-	
-	SetPowerAttributes(Power, Settings["unitframes-player-power-color"])
+
+	if Settings["unitframes-player-enable-power"] then
+		local Power = CreateFrame("StatusBar", nil, self)
+		Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+		Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+		Power:SetHeight(Settings["unitframes-player-power-height"])
+		Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
+		Power:SetReverseFill(Settings["unitframes-player-power-reverse"])
+		
+		local PowerBG = Power:CreateTexture(nil, "BORDER")
+		PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+		PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
+		PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
+		PowerBG:SetAlpha(0.2)
+		
+		local PowerRight = Power:CreateFontString(nil, "OVERLAY")
+		vUI:SetFontInfo(PowerRight, Settings["ui-widget-font"], Settings["ui-font-size"])
+		PowerRight:SetPoint("RIGHT", Power, -3, 0)
+		PowerRight:SetJustifyH("RIGHT")
+		
+		local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
+		vUI:SetFontInfo(PowerLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
+		PowerLeft:SetPoint("LEFT", Power, 3, 0)
+		PowerLeft:SetJustifyH("LEFT")
+		
+		-- Attributes
+		Power.frequentUpdates = true
+		Power.Smooth = true
+		
+		SetPowerAttributes(Power, Settings["unitframes-player-power-color"])
+		
+		self:Tag(PowerLeft, Settings["unitframes-player-power-left"])
+		self:Tag(PowerRight, Settings["unitframes-player-power-right"])
+		
+		self.Power = Power
+		self.Power.bg = PowerBG
+		self.PowerLeft = PowerLeft
+		self.PowerRight = PowerRight
+	end
 	
 	-- Mana regen
 	if Settings["unitframes-show-mana-timer"] then
@@ -1174,7 +1184,7 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.Totems = Totems]]
-	if (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
+	if (Settings["unitframes-player-enable-resource"] and (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID")) then
 		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
 		ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 		ComboPoints:SetSize(Settings["unitframes-player-width"], 10)
@@ -1246,19 +1256,12 @@ local StylePlayer = function(self, unit)
 	-- Tags
 	self:Tag(HealthLeft, Settings["unitframes-player-health-left"])
 	self:Tag(HealthRight, Settings["unitframes-player-health-right"])
-	self:Tag(PowerLeft, Settings["unitframes-player-power-left"])
-	self:Tag(PowerRight, Settings["unitframes-player-power-right"])
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
-	self.Power = Power
-	self.Power.bg = PowerBG
-	self.PowerValue = PowerValue
 	self.HealBar = HealBar
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
-	self.PowerLeft = PowerLeft
-	self.PowerRight = PowerRight
 	self.CombatIndicator = Combat
 	self.Buffs = Buffs
 	self.Debuffs = Debuffs
@@ -2464,13 +2467,19 @@ UF:SetScript("OnEvent", function(self, event)
 	if (event == "PLAYER_LOGIN") then
 		if Settings["unitframes-enable"] then
 			local Player = oUF:Spawn("player", "vUI Player")
-			Player:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + Settings["unitframes-player-power-height"] + 3)
-			Player:SetPoint("RIGHT", vUI.UIParent, "CENTER", -68, -304)
+			
+			if Settings["unitframes-player-enable-power"] then
+				Player:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + Settings["unitframes-player-power-height"] + 3)
+			else
+				Player:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + 2)
+			end
+			
+			Player:SetPoint("TOPRIGHT", vUI.UIParent, "CENTER", -68, -281)
 			Player:SetParent(vUI.UIParent)
 			
 			local Target = oUF:Spawn("target", "vUI Target")
 			Target:SetSize(Settings["unitframes-target-width"], Settings["unitframes-target-health-height"] + Settings["unitframes-target-power-height"] + 3)
-			Target:SetPoint("LEFT", vUI.UIParent, "CENTER", 68, -304)
+			Target:SetPoint("TOPLEFT", vUI.UIParent, "CENTER", 68, -281)
 			Target:SetParent(vUI.UIParent)
 			
 			local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
@@ -2931,6 +2940,8 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("unitframes-player-health-color", Settings["unitframes-player-health-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Custom"]] = "CUSTOM"}, Language["Health Bar Color"], Language["Set the color of the health bar"], UpdatePlayerHealthColor)
 	Left:CreateDropdown("unitframes-player-power-color", Settings["unitframes-player-power-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Power Type"]] = "POWER"}, Language["Power Bar Color"], Language["Set the color of the power bar"], UpdatePlayerPowerColor)
 	Left:CreateSwitch("unitframes-player-enable-castbar", Settings["unitframes-player-enable-castbar"], Language["Enable Cast Bar"], Language["Enable the player cast bar"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-player-enable-power", Settings["unitframes-player-enable-power"], Language["Enable Power Bar"], Language["Enable the player power bar"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-player-enable-resource", Settings["unitframes-player-enable-resource"], Language["Enable Resaource Bar"], Language["Enable the player resources such as combo points, runes, etc."], ReloadUI):RequiresReload(true)
 	Left:CreateSwitch("unitframes-show-player-buffs", Settings["unitframes-show-player-buffs"], Language["Show Player Buffs"], Language["Show your auras above the player unit frame"], UpdateShowPlayerBuffs)
 	Left:CreateSwitch("unitframes-show-mana-timer", Settings["unitframes-show-mana-timer"], Language["Enable Mana Regen Timer"], Language["Display the time until your full mana regeneration is active"], ReloadUI):RequiresReload(true)
 	Left:CreateSwitch("unitframes-show-energy-timer", Settings["unitframes-show-energy-timer"], Language["Enable Energy Timer"], Language["Display the time until your next energy tick on the power bar"], ReloadUI):RequiresReload(true)
