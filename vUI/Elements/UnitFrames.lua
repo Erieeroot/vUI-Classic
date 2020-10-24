@@ -1053,52 +1053,52 @@ local StylePlayer = function(self, unit)
 		self.Power.bg = PowerBG
 		self.PowerLeft = PowerLeft
 		self.PowerRight = PowerRight
-	end
-	
-	-- Mana regen
-	if Settings["unitframes-show-mana-timer"] then
-		local ManaTimer = CreateFrame("StatusBar", nil, Power)
-		ManaTimer:SetAllPoints(Power)
-		ManaTimer:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-		ManaTimer:SetStatusBarColor(0, 0, 0, 0)
-		ManaTimer:Hide()
 		
-		ManaTimer.Spark = ManaTimer:CreateTexture(nil, "ARTWORK")
-		ManaTimer.Spark:SetSize(3, Settings["unitframes-player-power-height"])
-		ManaTimer.Spark:SetPoint("LEFT", ManaTimer:GetStatusBarTexture(), "RIGHT", -1, 0)
-		ManaTimer.Spark:SetTexture(Assets:GetTexture("Blank"))
-		ManaTimer.Spark:SetVertexColor(1, 1, 1, 0.2)
+		-- Mana regen
+		if Settings["unitframes-show-mana-timer"] then
+			local ManaTimer = CreateFrame("StatusBar", nil, Power)
+			ManaTimer:SetAllPoints(Power)
+			ManaTimer:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
+			ManaTimer:SetStatusBarColor(0, 0, 0, 0)
+			ManaTimer:Hide()
+			
+			ManaTimer.Spark = ManaTimer:CreateTexture(nil, "ARTWORK")
+			ManaTimer.Spark:SetSize(3, Settings["unitframes-player-power-height"])
+			ManaTimer.Spark:SetPoint("LEFT", ManaTimer:GetStatusBarTexture(), "RIGHT", -1, 0)
+			ManaTimer.Spark:SetTexture(Assets:GetTexture("Blank"))
+			ManaTimer.Spark:SetVertexColor(1, 1, 1, 0.2)
+			
+			ManaTimer.Spark2 = ManaTimer:CreateTexture(nil, "ARTWORK")
+			ManaTimer.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
+			ManaTimer.Spark2:SetPoint("CENTER", ManaTimer.Spark, 0, 0)
+			ManaTimer.Spark2:SetTexture(Assets:GetTexture("Blank"))
+			ManaTimer.Spark2:SetVertexColor(1, 1, 1, 0.8)
+			
+			self.ManaTimer = ManaTimer
+		end
 		
-		ManaTimer.Spark2 = ManaTimer:CreateTexture(nil, "ARTWORK")
-		ManaTimer.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
-		ManaTimer.Spark2:SetPoint("CENTER", ManaTimer.Spark, 0, 0)
-		ManaTimer.Spark2:SetTexture(Assets:GetTexture("Blank"))
-		ManaTimer.Spark2:SetVertexColor(1, 1, 1, 0.8)
-		
-		self.ManaTimer = ManaTimer
-	end
-	
-	-- Energy ticks
-	if Settings["unitframes-show-energy-timer"] then
-		local EnergyTick = CreateFrame("StatusBar", nil, Power)
-		EnergyTick:SetAllPoints(Power)
-		EnergyTick:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-		EnergyTick:SetStatusBarColor(0, 0, 0, 0)
-		EnergyTick:Hide()
-		
-		EnergyTick.Spark = EnergyTick:CreateTexture(nil, "ARTWORK")
-		EnergyTick.Spark:SetSize(3, Settings["unitframes-player-power-height"])
-		EnergyTick.Spark:SetPoint("LEFT", EnergyTick:GetStatusBarTexture(), "RIGHT", -1, 0)
-		EnergyTick.Spark:SetTexture(Assets:GetTexture("Blank"))
-		EnergyTick.Spark:SetVertexColor(1, 1, 1, 0.2)
-		
-		EnergyTick.Spark2 = EnergyTick:CreateTexture(nil, "ARTWORK")
-		EnergyTick.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
-		EnergyTick.Spark2:SetPoint("CENTER", EnergyTick.Spark, 0, 0)
-		EnergyTick.Spark2:SetTexture(Assets:GetTexture("Blank"))
-		EnergyTick.Spark2:SetVertexColor(1, 1, 1, 0.8)
-		
-		self.EnergyTick = EnergyTick
+		-- Energy ticks
+		if Settings["unitframes-show-energy-timer"] then
+			local EnergyTick = CreateFrame("StatusBar", nil, Power)
+			EnergyTick:SetAllPoints(Power)
+			EnergyTick:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
+			EnergyTick:SetStatusBarColor(0, 0, 0, 0)
+			EnergyTick:Hide()
+			
+			EnergyTick.Spark = EnergyTick:CreateTexture(nil, "ARTWORK")
+			EnergyTick.Spark:SetSize(3, Settings["unitframes-player-power-height"])
+			EnergyTick.Spark:SetPoint("LEFT", EnergyTick:GetStatusBarTexture(), "RIGHT", -1, 0)
+			EnergyTick.Spark:SetTexture(Assets:GetTexture("Blank"))
+			EnergyTick.Spark:SetVertexColor(1, 1, 1, 0.2)
+			
+			EnergyTick.Spark2 = EnergyTick:CreateTexture(nil, "ARTWORK")
+			EnergyTick.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
+			EnergyTick.Spark2:SetPoint("CENTER", EnergyTick.Spark, 0, 0)
+			EnergyTick.Spark2:SetTexture(Assets:GetTexture("Blank"))
+			EnergyTick.Spark2:SetVertexColor(1, 1, 1, 0.8)
+			
+			self.EnergyTick = EnergyTick
+		end
 	end
 	
     -- Castbar
