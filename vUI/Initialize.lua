@@ -459,7 +459,12 @@ function vUI:ADDON_LOADED(event, addon)
 	self:UpdateoUFColors()
 	self:UpdateColors()
 	
-	-- Load the GUI
+	self:WelcomeMessage()
+	
+	self:UnregisterEvent(event)
+end
+
+function vUI:PLAYER_ENTERING_WORLD(event)
 	GUI:Create()
 	GUI:RunQueue()
 	
@@ -468,12 +473,6 @@ function vUI:ADDON_LOADED(event, addon)
 		GUI:ShowWindow(GUI.DefaultWindow)
 	end
 	
-	self:WelcomeMessage()
-	
-	self:UnregisterEvent(event)
-end
-
-function vUI:PLAYER_ENTERING_WORLD(event)
 	self:LoadModules()
 	self:LoadPlugins()
 	
