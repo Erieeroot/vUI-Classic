@@ -47,9 +47,7 @@ local UpdateEnableDismount = function(value)
 	end
 end
 
-GUI:AddOptions(function(self)
-	local Left, Right = self:GetWindow(Language["General"])
-	
-	Right:CreateHeader(Language["Auto Dismount"])
-	Right:CreateSwitch("dismount-enable", Settings["dismount-enable"], Language["Enable Auto Dismount"], Language["Automatically dismount during actions that can't be performed while mounted"], UpdateEnableDismount)
+GUI:AddSettings(Language["General"], Language["General"], function(left, right)
+	right:CreateHeader(Language["Auto Dismount"])
+	right:CreateSwitch("dismount-enable", Settings["dismount-enable"], Language["Enable Auto Dismount"], Language["Automatically dismount during actions that can't be performed while mounted"], UpdateEnableDismount)
 end)

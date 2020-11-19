@@ -62,14 +62,6 @@ vUI.Outline = {
 -- GUI
 local GUI = CreateFrame("Frame", nil, vUI.UIParent)
 
-GUI.Queue = {}
-
-function GUI:AddOptions(func)
-	if (type(func) == "function") then
-		tinsert(self.Queue, func)
-	end
-end
-
 -- Language
 local Language = {}
 
@@ -190,34 +182,30 @@ function vUI:LoadPlugins()
 		end
 	end
 	
-	self:AddPluginInfo()
+	if (#self.Plugins > 0) then
+		self:CreatePluginWindow()
+	end
 end
 
-function vUI:AddPluginInfo()
-	if (#self.Plugins == 0) then
-		return
-	end
-	
-	local Left, Right = GUI:CreateWindow("Plugins", nil, "zzzPlugins")
-	local Anchor
-	
-	for i = 1, #self.Plugins do
-		if ((i % 2) == 0) then
-			Anchor = Right
-		else
-			Anchor = Left
+function vUI:CreatePluginWindow()
+	GUI:AddSettings(Language["Info"], Language["Plugins"], function(left, right)
+		local Anchor
+
+		for i = 1, #self.Plugins do
+			if ((i % 2) == 0) then
+				Anchor = right
+			else
+				Anchor = left
+			end
+
+			Anchor:CreateHeader(self.Plugins[i].Title)
+
+			Anchor:CreateDoubleLine(Language["Author"], self.Plugins[i].Author)
+			Anchor:CreateDoubleLine(Language["Version"], self.Plugins[i].Version)
+			Anchor:CreateLine(" ")
+			Anchor:CreateMessage(self.Plugins[i].Notes)
 		end
-		
-		Anchor:CreateHeader(self.Plugins[i].Title)
-		
-		Anchor:CreateDoubleLine(Language["Author"], self.Plugins[i].Author)
-		Anchor:CreateDoubleLine(Language["Version"], self.Plugins[i].Version)
-		Anchor:CreateLine(" ")
-		Anchor:CreateMessage(self.Plugins[i].Notes)
-	end
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
+	end)
 end
 
 -- NYI, Concept list for my preferred CVars, and those important to the UI
@@ -439,6 +427,27 @@ function vUI:SetFontInfo(object, font, size, flags)
 	end
 end
 
+function vUI:CreatePluginWindow()
+	GUI:AddSettings(Language["Info"], Language["Plugins"], function(left, right)
+		local Anchor
+
+		for i = 1, #self.Plugins do
+			if ((i % 2) == 0) then
+				Anchor = right
+			else
+				Anchor = left
+			end
+
+			Anchor:CreateHeader(self.Plugins[i].Title)
+
+			Anchor:CreateDoubleLine(Language["Author"], self.Plugins[i].Author)
+			Anchor:CreateDoubleLine(Language["Version"], self.Plugins[i].Version)
+			Anchor:CreateLine(" ")
+			Anchor:CreateMessage(self.Plugins[i].Notes)
+		end
+	end)
+end
+
 -- Events
 function vUI:ADDON_LOADED(event, addon)
 	if (addon ~= "vUI") then
@@ -465,14 +474,6 @@ function vUI:ADDON_LOADED(event, addon)
 end
 
 function vUI:PLAYER_ENTERING_WORLD(event)
-	GUI:Create()
-	GUI:RunQueue()
-	
-	-- Show the default window
-	if GUI.DefaultWindow then
-		GUI:ShowWindow(GUI.DefaultWindow)
-	end
-	
 	self:LoadModules()
 	self:LoadPlugins()
 	

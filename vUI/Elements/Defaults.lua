@@ -295,7 +295,7 @@ Defaults["auto-vendor-report"] = true
 
 -- Announcements
 Defaults["announcements-enable"] = true
-Defaults["announcements-channel"] = "GROUP"
+Defaults["announcements-channel"] = "SELF"
 
 -- Dismount
 Defaults["dismount-enable"] = true

@@ -1,6 +1,6 @@
 ## Interface: 11305
 ## Author: Hydra
-## Version: 1.00955
+## Version: 1.00956
 ## Title: |cFFFFC44DvUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIGold
@@ -31,8 +31,9 @@ Languages\zhCN.lua
 Languages\zhTW.lua
 Elements\Styles.lua
 Elements\Defaults.lua
+Elements\GUI\GUI.lua
+Elements\GUI\Widgets.lua
 Elements\Profiles.lua
-Elements\GUI.lua
 Elements\Colors.lua
 Elements\Fonts.lua
 Elements\Throttle.lua

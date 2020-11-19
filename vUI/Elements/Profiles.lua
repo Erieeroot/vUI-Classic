@@ -104,7 +104,7 @@ function vUI:AddProfile(profile)
 		self.Profiles[Name] = profile
 		self.ProfileList[Name] = Name
 		
-		local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
+		local Widget = GUI:GetWidget(Language["General"], Language["Profiles"], "ui-profile")
 		Widget.Dropdown:CreateSelection(Name, Name)
 		Widget.Dropdown:Sort()
 		
@@ -620,16 +620,16 @@ function vUI:UpdateProfileInfo()
 		MostUsedServed = self:GetNumServedByProfile(MostUsed)
 	end
 	
-	GUI:GetWidgetByWindow(Language["Profiles"], "current-profile").Right:SetText(Name)
-	GUI:GetWidgetByWindow(Language["Profiles"], "created-by").Right:SetText(Profile["profile-created-by"])
-	GUI:GetWidgetByWindow(Language["Profiles"], "created-on").Right:SetText(vUI:IsToday(Profile["profile-created"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "last-modified").Right:SetText(vUI:IsToday(Profile["profile-last-modified"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "modifications").Right:SetText(self:CountChangedValues(Name))
-	GUI:GetWidgetByWindow(Language["Profiles"], "serving-characters").Right:SetText(NumServed)
+	GUI:GetWidget(Language["General"], Language["Profiles"], "current-profile").Right:SetText(Name)
+	GUI:GetWidget(Language["General"], Language["Profiles"], "created-by").Right:SetText(Profile["profile-created-by"])
+	GUI:GetWidget(Language["General"], Language["Profiles"], "created-on").Right:SetText(vUI:IsToday(Profile["profile-created"]))
+	GUI:GetWidget(Language["General"], Language["Profiles"], "last-modified").Right:SetText(vUI:IsToday(Profile["profile-last-modified"]))
+	GUI:GetWidget(Language["General"], Language["Profiles"], "modifications").Right:SetText(self:CountChangedValues(Name))
+	GUI:GetWidget(Language["General"], Language["Profiles"], "serving-characters").Right:SetText(NumServed)
 	
-	GUI:GetWidgetByWindow(Language["Profiles"], "popular-profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
-	GUI:GetWidgetByWindow(Language["Profiles"], "stored-profiles").Right:SetText(self:GetProfileCount())
-	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(self:CountUnusedProfiles())
+	GUI:GetWidget(Language["General"], Language["Profiles"], "popular-profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
+	GUI:GetWidget(Language["General"], Language["Profiles"], "stored-profiles").Right:SetText(self:GetProfileCount())
+	GUI:GetWidget(Language["General"], Language["Profiles"], "unused-profiles").Right:SetText(self:CountUnusedProfiles())
 end
 
 local AcceptNewProfile = function(value)
@@ -652,7 +652,7 @@ local CreateProfile = function(value)
 	vUI:CreateProfile(value)
 	vUI:UpdateProfileInfo()
 	
-	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
+	local Widget = GUI:GetWidget(Language["General"], Language["Profiles"], "ui-profile")
 	Widget.Dropdown:CreateSelection(value, value)
 	Widget.Dropdown:Sort()
 end
@@ -661,7 +661,7 @@ local DeleteProfile = function(value)
 	vUI:DeleteProfile(value)
 	vUI:UpdateProfileInfo()
 	
-	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
+	local Widget = GUI:GetWidget(Language["General"], Language["Profiles"], "ui-profile")
 	Widget.Dropdown:RemoveSelection(value)
 	Widget.Dropdown.Current:SetText(vUI:GetActiveProfileName())
 end
@@ -709,27 +709,25 @@ local CopyProfile = function(value)
 	vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure you would like to copy %s to %s?"], value, vUI:GetActiveProfileName()), ACCEPT, CopyProfileOnAccept, CANCEL, nil, value)
 end
 
-GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Profiles"])
+GUI:AddSettings(Language["General"], Language["Profiles"], function(left, right)
+	left:DisableScrolling()
 	
-	Left:DisableScrolling()
+	left:CreateHeader(Language["Profiles"])
+	left:CreateDropdown("ui-profile", vUI:GetActiveProfileName(), vUI:GetProfileList(), Language["Select Profile"], Language["Select a profile to load"], UpdateActiveProfile)
+	--left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
 	
-	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", vUI:GetActiveProfileName(), vUI:GetProfileList(), Language["Select Profile"], Language["Select a profile to load"], UpdateActiveProfile)
-	--Left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
+	left:CreateHeader(Language["Modify"])
+	left:CreateInput("profile-key", vUI:GetDefaultProfileKey(), Language["Create New Profile"], Language["Create a new profile to store a different collection of settings"], CreateProfile):DisableSaving()
+	left:CreateInput("profile-delete", vUI:GetDefaultProfileKey(), Language["Delete Profile"], Language["Delete a profile"], DeleteProfile):DisableSaving()
+	left:CreateInput("profile-rename", "", Language["Rename Profile"], Language["Rename the currently selected profile"], RenameProfile):DisableSaving()
+	--left:CreateInput("profile-copy", "", Language["Copy From"], Language["Copy the settings from another profile"], CopyProfile):DisableSaving()
+	left:CreateDropdown("profile-copy", vUI:GetActiveProfileName(), vUI:GetProfileList(), Language["Copy From"], Language["Copy the settings from another profile"], CopyProfile)
 	
-	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", vUI:GetDefaultProfileKey(), Language["Create New Profile"], Language["Create a new profile to store a different collection of settings"], CreateProfile):DisableSaving()
-	Left:CreateInput("profile-delete", vUI:GetDefaultProfileKey(), Language["Delete Profile"], Language["Delete a profile"], DeleteProfile):DisableSaving()
-	Left:CreateInput("profile-rename", "", Language["Rename Profile"], Language["Rename the currently selected profile"], RenameProfile):DisableSaving()
-	--Left:CreateInput("profile-copy", "", Language["Copy From"], Language["Copy the settings from another profile"], CopyProfile):DisableSaving()
-	Left:CreateDropdown("profile-copy", vUI:GetActiveProfileName(), vUI:GetProfileList(), Language["Copy From"], Language["Copy the settings from another profile"], CopyProfile)
+	left:CreateHeader(Language["Manage"])
+	left:CreateButton(Language["Restore"], Language["Restore To Default"], Language["Restore the currently selected profile to default settings"], RestoreToDefault):RequiresReload(true)
+	left:CreateButton(Language["Delete"], Language["Delete Unused Profiles"], Language["Delete any profiles that are not currently in use by any characters"], DeleteUnused)
 	
-	Left:CreateHeader(Language["Manage"])
-	Left:CreateButton(Language["Restore"], Language["Restore To Default"], Language["Restore the currently selected profile to default settings"], RestoreToDefault):RequiresReload(true)
-	Left:CreateButton(Language["Delete"], Language["Delete Unused Profiles"], Language["Delete any profiles that are not currently in use by any characters"], DeleteUnused)
-	
-	Left:CreateHeader(Language["Sharing is caring"])
-	Left:CreateButton(Language["Import"], Language["Import A Profile"], Language["Import a profile using an import string"], ShowImportWindow)
-	Left:CreateButton(Language["Export"], Language["Export Current Profile"], Language["Export the currently active profile as a string that can be shared with others"], ShowExportWindow)
+	left:CreateHeader(Language["Sharing is caring"])
+	left:CreateButton(Language["Import"], Language["Import A Profile"], Language["Import a profile using an import string"], ShowImportWindow)
+	left:CreateButton(Language["Export"], Language["Export Current Profile"], Language["Export the currently active profile as a string that can be shared with others"], ShowExportWindow)
 end)
