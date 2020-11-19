@@ -636,14 +636,14 @@ local NamePlateCallback = function(self)
 		self:EnableElement("TargetIndicator")
 		
 		if (Settings["nameplates-target-indicator-size"] == "SMALL") then
-			self.TargetIndicator.left:SetTexture(Assets:GetTexture("Arrow Left"))
-			self.TargetIndicator.right:SetTexture(Assets:GetTexture("Arrow Right"))
+			self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left"))
+			self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right"))
 		elseif (Settings["nameplates-target-indicator-size"] == "LARGE") then
-			self.TargetIndicator.left:SetTexture(Assets:GetTexture("Arrow Left Large"))
-			self.TargetIndicator.right:SetTexture(Assets:GetTexture("Arrow Right Large"))
+			self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Large"))
+			self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Large"))
 		elseif (Settings["nameplates-target-indicator-size"] == "HUGE") then
-			self.TargetIndicator.left:SetTexture(Assets:GetTexture("Arrow Left Huge"))
-			self.TargetIndicator.right:SetTexture(Assets:GetTexture("Arrow Right Huge"))
+			self.TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Huge"))
+			self.TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Huge"))
 		end
 	else
 		self:DisableElement("TargetIndicator")
@@ -714,13 +714,13 @@ local StyleNamePlate = function(self, unit)
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(TopLeft, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	Topleft:SetPoint("LEFT", Health, "TOPLEFT", 4, 3)
-	Topleft:SetJustifyH("LEFT")
+	TopLeft:SetPoint("LEFT", Health, "TOPLEFT", 4, 3)
+	TopLeft:SetJustifyH("LEFT")
 	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(TopRight, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	Topright:SetPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
-	Topright:SetJustifyH("RIGHT")
+	TopRight:SetPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
+	TopRight:SetJustifyH("RIGHT")
 	
 	local Bottom = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Bottom, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
@@ -729,13 +729,13 @@ local StyleNamePlate = function(self, unit)
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(BottomRight, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	Bottomright:SetPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
-	Bottomright:SetJustifyH("RIGHT")
+	BottomRight:SetPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
+	BottomRight:SetJustifyH("RIGHT")
 	
 	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(BottomLeft, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	Bottomleft:SetPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
-	Bottomleft:SetJustifyH("LEFT")
+	BottomLeft:SetPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
+	BottomLeft:SetJustifyH("LEFT")
 	
 	--[[local InsideCenter = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(InsideCenter, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
@@ -865,21 +865,21 @@ local StyleNamePlate = function(self, unit)
 	TargetIndicator:Hide()
 	
 	TargetIndicator.Left = TargetIndicator:CreateTexture(nil, "ARTWORK")
-	TargetIndicator.left:SetSize(16, 16)
-	TargetIndicator.left:SetPoint("RIGHT", TargetIndicator, "LEFT", 2, 0)
-	TargetIndicator.left:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	TargetIndicator.Left:SetSize(16, 16)
+	TargetIndicator.Left:SetPoint("RIGHT", TargetIndicator, "LEFT", 2, 0)
+	TargetIndicator.Left:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	TargetIndicator.Right = TargetIndicator:CreateTexture(nil, "ARTWORK")
-	TargetIndicator.right:SetSize(16, 16)
-	TargetIndicator.right:SetPoint("LEFT", TargetIndicator, "RIGHT", -3, 0)
-	TargetIndicator.right:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	TargetIndicator.Right:SetSize(16, 16)
+	TargetIndicator.Right:SetPoint("LEFT", TargetIndicator, "RIGHT", -3, 0)
+	TargetIndicator.Right:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	if (Settings["nameplates-target-indicator-size"] == "SMALL") then
-		TargetIndicator.left:SetTexture(Assets:GetTexture("Arrow Left"))
-		TargetIndicator.right:SetTexture(Assets:GetTexture("Arrow Right"))
+		TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left"))
+		TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right"))
 	elseif (Settings["nameplates-target-indicator-size"] == "LARGE") then
-		TargetIndicator.left:SetTexture(Assets:GetTexture("Arrow Left Large"))
-		TargetIndicator.right:SetTexture(Assets:GetTexture("Arrow Right Large"))
+		TargetIndicator.Left:SetTexture(Assets:GetTexture("Arrow Left Large"))
+		TargetIndicator.Right:SetTexture(Assets:GetTexture("Arrow Right Large"))
 	end
 	
 	self:Tag(Top, Settings["nameplates-top-text"])
