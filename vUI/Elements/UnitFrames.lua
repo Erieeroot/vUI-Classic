@@ -528,6 +528,10 @@ local PostUpdateIcon = function(self, unit, button, index, position, duration, e
 		end
 	end
 	
+	if (button.filter == "HARMFUL") then
+		button.icon:SetDesaturated(not button.isPlayer)
+	end
+	
 	if (vUI.DebuffColors[debuffType] and button.filter == "HARMFUL") then
 		button:SetBackdropColor(unpack(vUI.DebuffColors[debuffType]))
 	else
