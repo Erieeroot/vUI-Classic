@@ -67,6 +67,18 @@ Assets:SetStyle("vUI", {
 	
 	["experience-bar-color"] = "4C9900", 
 	["experience-rested-color"] = "00B4FF",
+	
+	["unitframes-font"] = "Roboto",
+	["unitframes-font-size"] = 12,
+	["unitframes-font-flags"] = "",
+	
+	["party-font"] = "Roboto",
+	["party-font-size"] = 12,
+	["party-font-flags"] = "",
+	
+	["raid-font"] = "Roboto",
+	["raid-font-size"] = 12,
+	["raid-font-flags"] = "",
 })
 
 -- vUI 2
@@ -136,6 +148,18 @@ Assets:SetStyle("vUI 2", {
 	
 	["experience-bar-color"] = "4C9900", 
 	["experience-rested-color"] = "00B4FF",
+	
+	["unitframes-font"] = "PT Sans",
+	["unitframes-font-size"] = 12,
+	["unitframes-font-flags"] = "",
+	
+	["party-font"] = "PT Sans",
+	["party-font-size"] = 12,
+	["party-font-flags"] = "",
+	
+	["raid-font"] = "PT Sans",
+	["raid-font-size"] = 12,
+	["raid-font-flags"] = "",
 })
 
 -- Conjured Muffin -- Casting: 2ECC71 - Interrupted: F39C12 - Failed: D35400
@@ -205,76 +229,19 @@ Assets:SetStyle("Conjured Muffin", {
 	
 	["experience-bar-color"] = "27AE60",
 	["experience-rested-color"] = "3EC5E9",
+	
+	["unitframes-font"] = "Roboto",
+	["unitframes-font-size"] = 12,
+	["unitframes-font-flags"] = "",
+	
+	["party-font"] = "Roboto",
+	["party-font-size"] = 12,
+	["party-font-flags"] = "",
+	
+	["raid-font"] = "Roboto",
+	["raid-font-size"] = 12,
+	["raid-font-flags"] = "",
 })
-
---[[ Zen
-Assets:SetStyle("Zen", {
-	["ui-widget-font"] = "Prototype",
-	["ui-header-font"] = "Prototype",
-	["ui-button-font"] = "Prototype",
-	
-	["ui-widget-texture"] = "vUI 4",
-	["ui-header-texture"] = "vUI 4",
-	["ui-button-texture"] = "vUI 4",
-	
-	["ui-header-font-color"] = "EFEBE9",
-	["ui-header-texture-color"] = "37474F",
-	
-	["ui-window-bg-color"] = "424242",
-	["ui-window-main-color"] = "263238",
-	
-	["ui-widget-color"] = "00FF99", -- 81D4FA
-	["ui-widget-bright-color"] = "8E8E8E",
-	["ui-widget-bg-color"] = "263238",
-	["ui-widget-font-color"] = "FAFAFA",
-	
-	["ui-button-font-color"] = "00FF99", -- 81D4FA
-	["ui-button-texture-color"] = "757575",
-	
-	["ui-font-size"] = 12,
-	["ui-header-font-size"] = 14,
-	["ui-title-font-size"] = 16,
-	
-	["chat-font"] = "Prototype",
-	["chat-font-size"] = 12,
-	["chat-font-flags"] = "",
-	
-	["chat-tab-font"] = "Prototype",
-	["chat-tab-font-size"] = 12,
-	["chat-tab-font-flags"] = "",
-	["chat-tab-font-color"] = "FFFFFF",
-	["chat-tab-font-color-mouseover"] = "00FF99",
-	
-	["chat-bubbles-font"] = "Prototype",
-	["chat-bubbles-font-size"] = 14,
-	["chat-bubbles-font-flags"] = "",
-	
-	["color-casting-start"] = "4C9900",
-	["color-casting-stopped"] = "F39C12",
-	["color-casting-interrupted"] = "D35400",
-	["color-casting-uninterruptible"] = "FF4444",
-	
-	["action-bars-font"] = "Prototype",
-	["action-bars-font-size"] = 12,
-	["action-bars-font-flags"] = "",
-	
-	["tooltips-font"] = "Prototype",
-	["tooltips-size"] = 12,
-	["tooltips-flags"] = "",
-	
-	["nameplates-font"] = "Prototype",
-	["nameplates-font-size"] = 12,
-	["nameplates-font-flags"] = "",
-	
-	["data-text-font"] = "Prototype",
-	["data-text-font-size"] = 12,
-	["data-text-font-flags"] = "",
-	["data-text-label-color"] = "FFFFFF",
-	["data-text-value-color"] = "00FF99",
-	
-	["experience-bar-color"] = "4C9900", 
-	["experience-rested-color"] = "00B4FF",
-})]]
 
 -- Sci-Fi
 Assets:SetStyle("Sci-Fi", {
@@ -343,4 +310,16 @@ Assets:SetStyle("Sci-Fi", {
 	
 	["experience-bar-color"] = "4C9900", 
 	["experience-rested-color"] = "00B4FF",
+	
+	["unitframes-font"] = "Prototype",
+	["unitframes-font-size"] = 12,
+	["unitframes-font-flags"] = "",
+	
+	["party-font"] = "Prototype",
+	["party-font-size"] = 12,
+	["party-font-flags"] = "",
+	
+	["raid-font"] = "Prototype",
+	["raid-font-size"] = 12,
+	["raid-font-flags"] = "",
 })
