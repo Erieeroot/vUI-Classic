@@ -306,6 +306,12 @@ function vUI:ApplyProfile(name)
 	self.ProfileData[self.UserProfileKey] = name
 	
 	Values = nil
+	
+	--[[local Profile = self:GetProfile(name)
+	
+	Settings = setmetatable(Profile, {__index = Defaults})
+	print(Defaults["ab-enable"],Settings["ab-enable"])
+	self.ProfileData[self.UserProfileKey] = name]]
 end
 
 function vUI:DeleteUnusedProfiles()
@@ -691,10 +697,6 @@ local RenameProfile = function(value)
 	end
 end
 
-local UpdateProfileInfo = function()
-	vUI:UpdateProfileInfo()
-end
-
 local RestoreToDefault = function()
 	vUI:RestoreToDefault(vUI:GetActiveProfileName())
 	
@@ -730,4 +732,35 @@ GUI:AddSettings(Language["General"], Language["Profiles"], function(left, right)
 	left:CreateHeader(Language["Sharing is caring"])
 	left:CreateButton(Language["Import"], Language["Import A Profile"], Language["Import a profile using an import string"], ShowImportWindow)
 	left:CreateButton(Language["Export"], Language["Export Current Profile"], Language["Export the currently active profile as a string that can be shared with others"], ShowExportWindow)
+	
+	right:CreateHeader(Language["What is a profile?"])
+	right:CreateMessage(Language["Profiles store your settings so that you can quickly and easily change between configurations."])
+	
+	local Name = vUI:GetActiveProfileName()
+	local Profile = vUI:GetProfile(Name)
+	local MostUsed = vUI:GetMostUsedProfile()
+	local NumServed, IsAll = vUI:GetNumServedByProfile(Name)
+	local NumUnused = vUI:CountUnusedProfiles()
+	local MostUsedServed = NumServed
+	
+	if IsAll then
+		NumServed = format("%d (%s)", NumServed, Language["All"])
+	end
+	
+	if (Profile ~= MostUsed) then
+		MostUsedServed = vUI:GetNumServedByProfile(MostUsed)
+	end
+	
+	right:CreateHeader(Language["Info"])
+	right:CreateDoubleLine(Language["Current Profile:"], Name)
+	right:CreateDoubleLine(Language["Created By:"], Profile["profile-created-by"])
+	right:CreateDoubleLine(Language["Created On:"], vUI:IsToday(Profile["profile-created"]))
+	right:CreateDoubleLine(Language["Last Modified:"], vUI:IsToday(Profile["profile-last-modified"]))
+	right:CreateDoubleLine(Language["Modifications:"], vUI:CountChangedValues(Name))
+	right:CreateDoubleLine(Language["Serving Characters:"], NumServed)
+	
+	right:CreateHeader(Language["General"])
+	right:CreateDoubleLine(Language["Popular Profile:"], format("%s (%d)", MostUsed, MostUsedServed))
+	right:CreateDoubleLine(Language["Stored Profiles:"], vUI:GetProfileCount())
+	right:CreateDoubleLine(Language["Unused Profiles:"], NumUnused)
 end)

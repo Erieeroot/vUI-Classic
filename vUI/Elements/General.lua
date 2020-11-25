@@ -159,36 +159,3 @@ GUI:AddSettings(Language["General"], Language["Styles"], function(left, right)
 	left:CreateSlider("ui-header-font-size", Settings["ui-header-font-size"], 8, 32, 1, Language["Header Font Size"], Language["Set the font size of header elements in the UI"])
 	left:CreateSlider("ui-title-font-size", Settings["ui-title-font-size"], 8, 32, 1, Language["Title Font Size"], Language["Set the font size of title elements in the UI"])
 end)
-
-GUI:AddSettings(Language["General"], Language["Profiles"], function(left, right)
-	right:CreateHeader(Language["What is a profile?"])
-	right:CreateMessage(Language["Profiles store your settings so that you can quickly and easily change between configurations."])
-	
-	local Name = vUI:GetActiveProfileName()
-	local Profile = vUI:GetProfile(Name)
-	local MostUsed = vUI:GetMostUsedProfile()
-	local NumServed, IsAll = vUI:GetNumServedByProfile(Name)
-	local NumUnused = vUI:CountUnusedProfiles()
-	local MostUsedServed = NumServed
-	
-	if IsAll then
-		NumServed = format("%d (%s)", NumServed, Language["All"])
-	end
-	
-	if (Profile ~= MostUsed) then
-		MostUsedServed = vUI:GetNumServedByProfile(MostUsed)
-	end
-	
-	right:CreateHeader(Language["Info"])
-	right:CreateDoubleLine(Language["Current Profile:"], Name)
-	right:CreateDoubleLine(Language["Created By:"], Profile["profile-created-by"])
-	right:CreateDoubleLine(Language["Created On:"], vUI:IsToday(Profile["profile-created"]))
-	right:CreateDoubleLine(Language["Last Modified:"], vUI:IsToday(Profile["profile-last-modified"]))
-	right:CreateDoubleLine(Language["Modifications:"], vUI:CountChangedValues(Name))
-	right:CreateDoubleLine(Language["Serving Characters:"], NumServed)
-	
-	right:CreateHeader(Language["General"])
-	right:CreateDoubleLine(Language["Popular Profile:"], format("%s (%d)", MostUsed, MostUsedServed))
-	right:CreateDoubleLine(Language["Stored Profiles:"], vUI:GetProfileCount())
-	right:CreateDoubleLine(Language["Unused Profiles:"], NumUnused)
-end)
