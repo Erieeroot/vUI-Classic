@@ -1,6 +1,24 @@
-local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
+local vUI, GUI, Language, Assets, Settings, Defaults = select(2, ...):get()
 
 local DT = vUI:NewModule("DataText")
+
+-- Default settings values
+Defaults["data-text-font"] = "Roboto"
+Defaults["data-text-font-size"] = 12
+Defaults["data-text-font-flags"] = ""
+Defaults["data-text-label-color"] = "FFFFFF"
+Defaults["data-text-value-color"] = "FFC44D"
+Defaults["data-text-chat-left"] = "Gold"
+Defaults["data-text-chat-middle"] = "Crit"
+Defaults["data-text-chat-right"] = "Durability"
+Defaults["data-text-minimap-top"] = "Location"
+Defaults["data-text-minimap-bottom"] = "Time - Local"
+Defaults["data-text-extra-left"] = "Bag Slots"
+Defaults["data-text-extra-middle"] = "Friends"
+Defaults["data-text-extra-right"] = "Guild"
+Defaults["data-text-enable-tooltips"] = true
+Defaults["data-text-hover-tooltips"] = true
+Defaults["data-text-24-hour"] = false
 
 DT.Anchors = {}
 DT.Types = {}
@@ -34,19 +52,18 @@ function DT:NewAnchor(name, parent)
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, parent)
-	Anchor:SetSize(120, 20)
 	Anchor:SetFrameLevel(parent:GetFrameLevel() + 1)
 	Anchor:SetFrameStrata(parent:GetFrameStrata())
-	Anchor:SetBackdrop(vUI.Backdrop)
-	Anchor:SetBackdropColor(0, 0, 0, 0)
 	
 	Anchor.Name = name
 	Anchor.SetTooltip = SetTooltip
 	
 	Anchor.Text = Anchor:CreateFontString(nil, "ARTWORK")
 	vUI:SetFontInfo(Anchor.Text, Settings["data-text-font"], Settings["data-text-font-size"], Settings["data-text-font-flags"])
-	Anchor.Text:SetPoint("CENTER", Anchor, "CENTER", 0, 0)
+	Anchor.Text:SetPoint("LEFT", Anchor, 2, 0)
+	Anchor.Text:SetPoint("RIGHT", Anchor, -2, 0)
 	Anchor.Text:SetJustifyH("CENTER")
+	Anchor.Text:SetHeight(Settings["data-text-font-size"])
 	
 	self.Anchors[name] = Anchor
 	
@@ -88,7 +105,7 @@ end
 
 function DT:UpdateAllAnchors()
 	for Name, Anchor in pairs(self.Anchors) do
-		Anchor:Update(999)
+		Anchor:Update(999, "player")
 	end
 end
 
