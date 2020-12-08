@@ -27,7 +27,7 @@ local ClientToName = {
 }
 
 local ProjectIDToName = {
-	[1] = EXPANSION_NAME8,
+	[1] = Language["Shadowlands"],
 	[2] = EXPANSION_NAME0,
 }
 
