@@ -478,7 +478,26 @@ local ComboPointsUpdateShapeshiftForm = function(self, form)
 	
 	Parent.Buffs:ClearAllPoints()
 	
-	if (form == 3) then
+	local dForm = GetShapeshiftForm()
+	local bearForm = IsSpellKnown(5487)
+	local aquaticForm = IsSpellKnown(1066)
+	local catForm 
+
+	if (bearForm == true) and (aquaticForm == false) then
+		--bear, no aquatic
+		catForm = 2
+	elseif (bearForm == false) and (aquaticForm == true) then
+		--aquatic, no bear
+		catForm = 2
+	elseif (bearForm == false) and (aquaticForm == false) then
+		--no preceding forms
+		catForm = 1
+	elseif (bearForm == true) and (aquaticForm == true) then
+		--all preceding forms
+		catForm = 3
+	end
+
+	if (dForm == catForm) then
 		Parent.Buffs:SetPoint("BOTTOMLEFT", Parent.ComboPoints, "TOPLEFT", 0, 2)
 	else
 		Parent.Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
